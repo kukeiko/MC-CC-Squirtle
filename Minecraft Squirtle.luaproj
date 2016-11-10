@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>E439935D-B2A2-46AE-856D-2AA408428F33</ProjectGuid>
+    <!--$guid1$-->
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>Minecraft Squirtle</Name>
+    <RootNamespace>Minecraft Squirtle</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="modules\" />
+    <Folder Include="modules\core\" />
+    <Folder Include="modules\kevlar\" />
+    <Folder Include="modules\kevlar\sync\" />
+    <Folder Include="modules\scout\" />
+    <Folder Include="modules\squirtle\" />
+    <Folder Include="modules\unity\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="modules\core\disk.lua" />
+    <Compile Include="modules\core\event-manager.lua" />
+    <Compile Include="modules\core\extensions.lua" />
+    <Compile Include="modules\core\globals.lua" />
+    <Compile Include="modules\core\log.lua" />
+    <Compile Include="modules\core\message-pump.lua" />
+    <Compile Include="modules\core\pathing.lua" />
+    <Compile Include="modules\core\thread.lua" />
+    <Compile Include="modules\core\utils.lua" />
+    <Compile Include="modules\kevlar\core.lua" />
+    <Compile Include="modules\kevlar\header.lua" />
+    <Compile Include="modules\kevlar\h-line.lua" />
+    <Compile Include="modules\kevlar\ibuffer.lua" />
+    <Compile Include="modules\kevlar\sync\input.lua" />
+    <Compile Include="modules\kevlar\sync\menu.lua" />
+    <Compile Include="modules\kevlar\sync\select.lua" />
+    <Compile Include="modules\kevlar\sync\wizard.lua" />
+    <Compile Include="modules\kevlar\terminal.lua" />
+    <Compile Include="modules\kevlar\text.lua" />
+    <Compile Include="modules\kevlar\virtual-buffer.lua" />
+    <Compile Include="modules\scout\waypoint.lua" />
+    <Compile Include="modules\scout\waypoints.app.lua" />
+    <Compile Include="modules\squirtle\computer.lua" />
+    <Compile Include="modules\squirtle\equipment.lua" />
+    <Compile Include="modules\squirtle\fueling.lua" />
+    <Compile Include="modules\squirtle\inventory.lua" />
+    <Compile Include="modules\core\item.lua" />
+    <Compile Include="modules\squirtle\peripherals.lua" />
+    <Compile Include="modules\squirtle\turtle-shell.app.lua" />
+    <Compile Include="modules\squirtle\tablet.lua" />
+    <Compile Include="modules\squirtle\turtle.lua" />
+    <Compile Include="modules\squirtle\turtle-api.lua" />
+    <Compile Include="modules\squirtle\unit.lua" />
+    <Compile Include="modules\core\vector.lua" />
+    <Compile Include="modules\unity\adapter.lua" />
+    <Compile Include="modules\unity\client.lua" />
+    <Compile Include="modules\unity\packet.lua" />
+    <Compile Include="modules\unity\server.lua" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+</Project>
