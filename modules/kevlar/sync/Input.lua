@@ -3,25 +3,25 @@ local Input = { }
 --- <summary>
 --- </summary>
 --- <returns type="Kevlar.Sync.Input"></returns>
-function Input.new(buffer)
+function Input.new(charSpace)
     local instance = { }
     setmetatable(instance, { __index = Input })
-    instance:ctor(buffer)
+    instance:ctor(charSpace)
 
     return instance
 end
 
-function Input:ctor(buffer)
-    self._buffer = Kevlar.IBuffer.as(buffer)
-    self._buffer:clear("*")
+function Input:ctor(charSpace)
+    self._charSpace = Kevlar.ICharSpace.as(charSpace)
 end
 
 function Input:read()
     local value = ""
 
     while (true) do
-        self._buffer:clear()
-        self._buffer:write(1, 1, value)
+        self._charSpace:clear()
+        self._charSpace:write(1, 1, value)
+
         local event, key = Core.MessagePump.pullMany("key", "char")
 
         if (event == "key") then

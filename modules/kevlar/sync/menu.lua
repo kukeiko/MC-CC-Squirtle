@@ -2,19 +2,19 @@ local Menu = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Sync.Menu"></returns>
-function Menu.new(buffer)
+function Menu.new(charSpace)
     local instance = { }
     setmetatable(instance, { __index = Menu })
-    instance:ctor(buffer)
+    instance:ctor(charSpace)
 
     return instance
 end
 
-function Menu:ctor(buffer)
+function Menu:ctor(charSpace)
     self._items = { }
     self._selectedIndex = 1
     self._doQuit = false
-    self._buffer = buffer
+    self._charSpace = charSpace
 end
 
 --- <summary></summary>
@@ -52,20 +52,20 @@ function Menu:run()
 end
 
 function Menu:draw()
-    local buffer = Kevlar.IBuffer.as(self._buffer)
-    buffer:clear()
+    local charSpace = Kevlar.ICharSpace.as(self._charSpace)
+    charSpace:clear()
 
-    for i = 1, buffer:getHeight() do
+    for i = 1, charSpace:getHeight() do
         local item = self._items[i]
         if (item == nil) then break end
 
         if (i == self._selectedIndex) then
-            buffer:write(1, i, ">")
+            charSpace:write(1, i, ">")
         else
-            buffer:write(1, i, " ")
+            charSpace:write(1, i, " ")
         end
 
-        buffer:write(2, i, item.text)
+        charSpace:write(2, i, item.text)
     end
 end
 

@@ -92,14 +92,14 @@ function Unit:stopService(name)
     self._runningServices[name] = nil
 end
 
-function Unit:configService(name, buffer)
+function Unit:configService(name, charSpace)
     local instance = self._runningServices[name]
 
     if (instance == nil) then
         error("Service " .. name .. " is not running")
     end
 
-    instance:config(buffer)
+    instance:config(charSpace)
 end
 
 function Unit:getAvailableServices()

@@ -9,20 +9,19 @@ Text.Align = {
 
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
-function Text.new(text, align, buffer)
+function Text.new(text, align)
     local instance = { }
     setmetatable(instance, { __index = Text })
 
     text = text or ""
     align = align or Text.Align.Left
 
-    instance:ctor(text, align, buffer)
+    instance:ctor(text, align)
 
     return instance
 end
 
-function Text:ctor(text, align, buffer)
-    self._buffer = Kevlar.IBuffer.as(buffer)
+function Text:ctor(text, align)
     self._text = text
     self._align = align
 end
@@ -41,14 +40,15 @@ end
 
 function Text:setText(text)
     self._text = text
-    self:draw()
 end
 
-function Text:draw()
-    local lines = self:formatLines(self._buffer:getWidth(), self._buffer:getHeight())
+function Text:draw(charSpace)
+    charSpace = Kevlar.ICharSpace.as(charSpace)
+
+    local lines = self:formatLines(charSpace:getWidth(), charSpace:getHeight())
 
     for y = 1, #lines do
-        self._buffer:write(1, y, lines[y])
+        charSpace:write(1, y, lines[y])
     end
 end
 

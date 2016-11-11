@@ -2,19 +2,19 @@ local Select = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Sync.Select"></returns>
-function Select.new(buffer)
+function Select.new(charSpace)
     local instance = { }
     setmetatable(instance, { __index = Select })
-    instance:ctor(buffer)
+    instance:ctor(charSpace)
 
     return instance
 end
 
-function Select:ctor(buffer)
+function Select:ctor(charSpace)
     self._options = { }
     self._selectedIndex = 1
     self._doQuit = false
-    self._buffer = buffer
+    self._charSpace = charSpace
 end
 
 --- <summary></summary>
@@ -49,20 +49,20 @@ function Select:run()
 end
 
 function Select:draw()
-    local buffer = Kevlar.IBuffer.as(self._buffer)
-    buffer:clear()
+    local charSpace = Kevlar.ICharSpace.as(self._charSpace)
+    charSpace:clear()
 
-    for i = 1, buffer:getHeight() do
+    for i = 1, charSpace:getHeight() do
         local item = self._options[i]
         if (item == nil) then break end
 
         if (i == self._selectedIndex) then
-            buffer:write(1, i, ">")
+            charSpace:write(1, i, ">")
         else
-            buffer:write(1, i, " ")
+            charSpace:write(1, i, " ")
         end
 
-        buffer:write(2, i, item.text)
+        charSpace:write(2, i, item.text)
     end
 end
 

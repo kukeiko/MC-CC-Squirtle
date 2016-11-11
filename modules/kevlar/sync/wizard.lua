@@ -3,24 +3,24 @@ local Wizard = { }
 --- <summary>
 --- </summary>
 --- <returns type="Kevlar.Sync.Wizard"></returns>
-function Wizard.new(buffer)
+function Wizard.new(charSpace)
     local instance = { }
     setmetatable(instance, { __index = Wizard })
-    instance:ctor(buffer)
+    instance:ctor(charSpace)
 
     return instance
 end
 
-function Wizard:ctor(buffer)
+function Wizard:ctor(charSpace)
     self._numEntered = 0
-    self._buffer = Kevlar.IBuffer.as(buffer)
-    self._buffer:clear()
+    self._charSpace = Kevlar.ICharSpace.as(charSpace)
+    self._charSpace:clear()
 end
 
 function Wizard:printDashLine()
-    local w = self._buffer:getWidth()
+    local w = self._charSpace:getWidth()
 
-    self._buffer:write(1, 1, string.rep("-", w))
+    self._charSpace:write(1, 1, string.rep("-", w))
 end
 
 function Wizard:getInt(message, min, max)
@@ -34,9 +34,9 @@ function Wizard:getInt(message, min, max)
 
     message = message .. ":"
 
-    self._buffer:write(1, 1 + self._numEntered, message)
+    self._charSpace:write(1, 1 + self._numEntered, message)
 
-    local input = Kevlar.Sync.Input.new(self._buffer:sub(#message + 2, self._numEntered + 1, "*", 1))
+    local input = Kevlar.Sync.Input.new(self._charSpace:sub(#message + 2, self._numEntered + 1, "*", 1))
     local value = nil
 
     while (value == nil or(min ~= nil and value < min) or(max ~= nil and value > max)) do
@@ -53,8 +53,8 @@ function Wizard:getString(message)
     message = message .. ":"
 
     local value = nil
-    self._buffer:write(1, 1 + self._numEntered, message)
-    local input = Kevlar.Sync.Input.new(self._buffer:sub(#message + 2, self._numEntered + 1, "*", 1))
+    self._charSpace:write(1, 1 + self._numEntered, message)
+    local input = Kevlar.Sync.Input.new(self._charSpace:sub(#message + 2, self._numEntered + 1, "*", 1))
     self._numEntered = self._numEntered + 1
 
     return input:read()
@@ -70,8 +70,8 @@ function Wizard:getVector(message)
     end
 
     local value = nil
-    self._buffer:write(1, 1 + self._numEntered, message)
-    local input = Kevlar.Sync.Input.new(self._buffer:sub(1, line + 1, "*", 1))
+    self._charSpace:write(1, 1 + self._numEntered, message)
+    local input = Kevlar.Sync.Input.new(self._charSpace:sub(1, line + 1, "*", 1))
 
     while (value == nil) do
         local values = string.split(input:read(), ",")
@@ -97,8 +97,8 @@ function Wizard:getBool(message)
     if (y == 0) then
         y = 1
     end
-    local input = Kevlar.Sync.Input.new(self._buffer:sub(1, y + 1, "*", 1))
-    self._buffer:write(1, 1 + self._numEntered, message)
+    local input = Kevlar.Sync.Input.new(self._charSpace:sub(1, y + 1, "*", 1))
+    self._charSpace:write(1, 1 + self._numEntered, message)
     self._numEntered = self._numEntered + 1
 
     local value = nil

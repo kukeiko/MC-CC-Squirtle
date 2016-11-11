@@ -1,21 +1,21 @@
 local Waypoints = { }
 
-function Waypoints.new(unit, buffer)
+function Waypoints.new(unit, charSpace)
     local instance = { }
     setmetatable(instance, { __index = Waypoints })
 
-    instance:ctor(unit, buffer)
+    instance:ctor(unit, charSpace)
 
     return instance
 end
 
-function Waypoints:ctor(unit, buffer)
+function Waypoints:ctor(unit, charSpace)
     self._unit = Squirtle.Unit.as(unit)
-    self._buffer = Kevlar.IBuffer.as(buffer)
+    self._charSpace = Kevlar.ICharSpace.as(charSpace)
 end
 
 function Waypoints:run()
-    local header = Kevlar.Header.new("Waypoints", "-", self._buffer:sub(1, 1, "*", 1))
+    local header = Kevlar.Header.new("Waypoints", "-", self._charSpace:sub(1, 1, "*", 1))
     header:draw()
 
     Core.MessagePump.pull("key")

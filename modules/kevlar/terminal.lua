@@ -4,7 +4,7 @@ local Terminal = { }
 --- <returns type="Kevlar.Terminal"></returns>
 function Terminal.new()
     local instance = { }
-    setmetatable(Terminal, { __index = Kevlar.IBuffer })
+    setmetatable(Terminal, { __index = Kevlar.ICharSpace })
     setmetatable(instance, { __index = Terminal })
 
     instance:ctor(terminal)
@@ -24,7 +24,7 @@ function Terminal.cast(instance)
     return instance
 end
 
---- <returns type="Kevlar.IBuffer"></returns>
+--- <returns type="Kevlar.ICharSpace"></returns>
 function Terminal:base()
     return self
 end
@@ -34,9 +34,9 @@ function Terminal:clear(char)
     self._terminal.clear()
 end
 
---- <returns type="Kevlar.IBuffer"></returns>
+--- <returns type="Kevlar.ICharSpace"></returns>
 function Terminal:sub(x, y, w, h)
-    return Kevlar.IBuffer.sub(self, x, y, w, h)
+    return Kevlar.ICharSpace.sub(self, x, y, w, h)
 end
 
 function Terminal:getWidth()

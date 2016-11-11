@@ -3,19 +3,18 @@ local Header = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Header"></returns>
-function Header.new(title, lineChar, buffer)
+function Header.new(title, lineStr)
     local instance = { }
     setmetatable(instance, { __index = Header })
 
-    instance:ctor(title, lineChar, buffer)
+    instance:ctor(title, lineStr)
 
     return instance
 end
 
-function Header:ctor(title, lineChar, buffer)
-    self._buffer = Kevlar.IBuffer.as(buffer)
-    self._text = Kevlar.Text.new(title, Kevlar.Text.Align.Center, buffer:sub(1, 1, "*", 1))
-    self._line = Kevlar.HLine.new(lineChar, buffer:sub(1, 2, "*", 1))
+function Header:ctor(title, lineStr)
+    self._text = Kevlar.Text.new(title, Kevlar.Text.Align.Center)
+    self._line = Kevlar.HLine.new(lineStr)
 end
 
 --- <summary></summary>
@@ -26,9 +25,11 @@ function Header:setText(text)
     self._text:setText(text)
 end
 
-function Header:draw()
-    self._text:draw()
-    self._line:draw()
+function Header:draw(charSpace)
+    charSpace = Kevlar.ICharSpace.as(charSpace)
+    ---, charSpace:sub(1, 2, "*", 1)
+    self._text:draw(charSpace:sub(1, 1, "*", 1))
+    self._line:draw(charSpace:sub(1, 2, "*", 1))
 end
 
 if (Kevlar == nil) then Kevlar = { } end
