@@ -9,9 +9,10 @@ Text.Align = {
 
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
-function Text.new(text, align)
-    local instance = { }
+function Text.new(text, align, w, h)
+    local instance = Kevlar.Node.new(w, h)
     setmetatable(instance, { __index = Text })
+    setmetatable(Text, { __index = Kevlar.Node })
 
     text = text or ""
     align = align or Text.Align.Left
@@ -28,7 +29,15 @@ end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
-function Text.cast(instance) return instance end
+function Text.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Node"></returns>
+function Text:base() return self end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Node"></returns>
+function Text.super() return Kevlar.Node end
 
 function Text:getLength()
     return string.len(self._text)
@@ -42,14 +51,50 @@ function Text:setText(text)
     self._text = text
 end
 
-function Text:draw(charSpace)
-    charSpace = Kevlar.ICharSpace.as(charSpace)
-
-    local lines = self:formatLines(charSpace:getWidth(), charSpace:getHeight())
+function Text:update()
+    local buffer = self:base():getBuffer()
+    local lines = self:formatLines(buffer:getWidth(), buffer:getHeight(), self:getAlign())
 
     for y = 1, #lines do
-        charSpace:write(1, y, lines[y])
+        buffer:write(1, y, lines[y])
     end
+end
+
+--- <returns type="number"></returns>
+function Text:computeWidth(h)
+    if (h == nil) then
+        local highest = 0
+
+        for i, word in ipairs(self:getWords()) do
+            if (#word > highest) then
+                highest = #word
+            end
+        end
+
+        return highest
+    else
+        error("Text:computeWidth(h) not implemented")
+    end
+end
+
+--- <returns type="number"></returns>
+function Text:computeHeight(w)
+    if (w == nil) then
+        return 1
+    else
+        local lines = self:formatLines(w, nil, self:getAlign())
+
+        return #lines
+    end
+end
+
+--- <returns type="Kevlar.Node.Sizing"></returns>
+function Text:getSizing()
+    return self.super().getSizing(self)
+end
+
+function Text:setSizing(sizing)
+    self.super().setSizing(self, sizing)
 end
 
 function Text:setAlign(align) self._align = align end
@@ -77,9 +122,6 @@ function Text:formatLines(width, maxNumLines, align)
 end
 
 function Text:formatLine(line, width, align)
-    width = width or self:getWidth()
-    align = align or self:getAlign()
-
     if (align == Text.Align.Justify) then
         if (#line == 1) then return self:formatLine(line, width, Text.Align.Left) end
 
@@ -134,8 +176,6 @@ function Text:formatLine(line, width, align)
 end
 
 function Text:getLines(width, maxNumLines)
-    width = width or self:getWidth()
-
     local words = self:getWords()
     local lines = { }
     local line = { }

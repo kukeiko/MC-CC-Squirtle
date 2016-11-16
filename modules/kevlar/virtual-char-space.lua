@@ -47,7 +47,7 @@ end
 
 --- <returns type="Kevlar.ICharSpace"></returns>
 function VirtualCharSpace:sub(x, y, w, h)
-    return Kevlar.ICharSpace.sub(self, x, y, w, h)
+    return VirtualCharSpace.sub(self, x, y, w, h)
 end
 
 

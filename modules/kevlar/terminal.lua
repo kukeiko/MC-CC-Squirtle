@@ -2,41 +2,33 @@ local Terminal = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Terminal"></returns>
-function Terminal.new()
+function Terminal.new(t)
     local instance = { }
-    setmetatable(Terminal, { __index = Kevlar.ICharSpace })
+    setmetatable(Terminal, { __index = Kevlar.CharSpace })
     setmetatable(instance, { __index = Terminal })
 
-    instance:ctor(terminal)
+    instance:ctor(t)
 
     return instance
 end
 
-function Terminal:ctor()
-    self._terminal = term.current()
-    self._offsetX = 0
-    self._offsetY = 0
+function Terminal:ctor(t)
+    self._terminal = t or term.current()
 end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Terminal"></returns>
-function Terminal.cast(instance)
-    return instance
+function Terminal.as(instance) return instance end
+
+function Terminal:write(x, y, str)
+    for i = 1, #str do
+        self._terminal.setCursorPos(x +(i - 1), y)
+        self._terminal.write(str:sub(i, i))
+    end
 end
 
---- <returns type="Kevlar.ICharSpace"></returns>
-function Terminal:base()
-    return self
-end
-
-function Terminal:clear(char)
-    -- todo: implement with char
+function Terminal:clear()
     self._terminal.clear()
-end
-
---- <returns type="Kevlar.ICharSpace"></returns>
-function Terminal:sub(x, y, w, h)
-    return Kevlar.ICharSpace.sub(self, x, y, w, h)
 end
 
 function Terminal:getWidth()
@@ -49,13 +41,8 @@ function Terminal:getHeight()
     return h
 end
 
-function Terminal:getSize() return self._terminal.getSize() end
-
-function Terminal:write(x, y, str)
-    for i = 1, #str do
-        self._terminal.setCursorPos(x + self._offsetX +(i - 1), y + self._offsetY)
-        self._terminal.write(str:sub(i, i))
-    end
+function Terminal:getSize()
+    return self._terminal.getSize()
 end
 
 if (Kevlar == nil) then Kevlar = { } end
