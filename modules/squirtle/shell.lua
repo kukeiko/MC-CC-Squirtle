@@ -21,43 +21,36 @@ end
 function Shell.as(instance) return instance end
 
 function Shell:run()
-    local mtr = peripheral.wrap("front")
+    --    local mtr = peripheral.wrap("front")
     --    term.redirect(mtr)
     local t = Kevlar.Terminal.new(term.current())
 
-    local vb = Kevlar.VerticalBranch.new()
-    local hb = Kevlar.HorizontalBranch.new()
-    hb:setSizing(Kevlar.Node.Sizing.Stretched)
-    vb:addChild(hb)
-
-    local khazText = Kevlar.Text.new("khaz foo bla blub moo wow zong zaboika ukulele", Kevlar.Text.Align.Center)
-    khazText:setSizing(Kevlar.Node.Sizing.Stretched)
-    hb:addChild(khazText)
-
-
-    local moText = Kevlar.Text.new("mo", Kevlar.Text.Align.Center)
-    moText:setSizing(Kevlar.Node.Sizing.Stretched)
-    hb:addChild(moText)
-
-    local quakText = Kevlar.Text.new("quak!")
-    quakText:setSizing(Kevlar.Node.Sizing.Stretched)
-    vb:addChild(quakText)
-    --    print(textutils.serialize(hb:computeChildSizes(t:getWidth())))
-    --    print(hb:computeHeight(t:getWidth()))
-    --    print(hb:computeHeight(10))
-    --    local danText = Kevlar.Text.new("dan", Kevlar.Text.Align.Left)
-    --    danText:setSizing(Kevlar.Node.Sizing.Stretched)
-    --    vb:addChild(danText, "baz")
-
-    local win = Kevlar.Window.new("Sandbox", vb, t:getSize())
-    win:update()
-    win:draw(t)
-    --    print(vb:computeHeight(15))
+    local winIndex = 1
+    local windows = { }
+    table.insert(windows, self:createTestWindow(t, "Khaz"))
+    table.insert(windows, self:createTestWindow(t, "Mo"))
+    table.insert(windows, self:createTestWindow(t, "Dan"))
+    table.insert(windows, self:createTestWindow(t, "Foo"))
+    table.insert(windows, self:createTestWindow(t, "Bar"))
+    table.insert(windows, self:createTestWindow(t, "Baz"))
 
     local x = 0
     local y = 0
 
-    Core.MessagePump.on("key", function(key)
+    repeat
+        local win = windows[winIndex]
+        win:update()
+        win:draw(t, x, y)
+
+        local key = Core.MessagePump.pull("key")
+
+        if (key == keys.tab) then
+            winIndex = winIndex + 1
+            if (winIndex > #windows) then
+                winIndex = 1
+            end
+        end
+
         if (key == keys.a) then
             x = x - 1
         elseif (key == keys.d) then
@@ -67,11 +60,31 @@ function Shell:run()
         elseif (key == keys.s) then
             y = y + 1
         end
+    until false
+end
 
-        win:draw(t, x, y)
-    end )
+function Shell:createTestWindow(terminal, text)
+    terminal = Kevlar.Terminal.as(terminal)
+
+    local vb = Kevlar.VerticalBranch.new()
+    local hb = Kevlar.HorizontalBranch.new()
+    hb:setSizing(Kevlar.Sizing.Stretched)
+    vb:addChild(hb)
+
+    local khazText = Kevlar.Text.new(text, Kevlar.Text.Align.Center)
+    khazText:setSizing(Kevlar.Sizing.Stretched)
+    hb:addChild(khazText)
 
 
+    local moText = Kevlar.Text.new(text, Kevlar.Text.Align.Center)
+    moText:setSizing(Kevlar.Sizing.Stretched)
+    hb:addChild(moText)
+
+    local quakText = Kevlar.Text.new(text)
+    quakText:setSizing(Kevlar.Sizing.Stretched)
+    vb:addChild(quakText)
+
+    return Kevlar.Window.new(text, vb, terminal:getSize())
 end
 
 if (Squirtle == nil) then Squirtle = { } end

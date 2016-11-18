@@ -88,7 +88,7 @@ function Text:computeHeight(w)
     end
 end
 
---- <returns type="Kevlar.Node.Sizing"></returns>
+--- <returns type="Kevlar.Sizing"></returns>
 function Text:getSizing()
     return self.super().getSizing(self)
 end

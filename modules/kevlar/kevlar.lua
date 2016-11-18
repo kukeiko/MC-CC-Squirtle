@@ -1,5 +1,8 @@
-if (Kevlar == nil) then
-    Kevlar = {
-        escape = 59
-    }
-end
+Kevlar = Kevlar or { }
+
+Kevlar.escape = 50
+
+Kevlar.Sizing = {
+    Dynamic = 1,
+    Stretched = 2
+}

@@ -70,7 +70,7 @@ function HorizontalBranch:computeChildSizes(wMax)
         table.insert(eligible, child)
         table.insert(minWidths, minWidth)
 
-        if (child:getSizing() == Kevlar.Node.Sizing.Stretched) then
+        if (child:getSizing() == Kevlar.Sizing.Stretched) then
             table.insert(stretched, i)
         end
 

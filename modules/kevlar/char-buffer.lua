@@ -1,6 +1,3 @@
---- b = Kevlar.CharBuffer.new(4, 2)
---- t = Kevlar.Terminal.new()
---- todo: width / height is not really used (except by Kevlar.Node)
 local CharBuffer = { }
 
 --- <summary></summary>

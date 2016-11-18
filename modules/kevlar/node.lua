@@ -1,10 +1,5 @@
 local Node = { }
 
-Node.Sizing = {
-    Dynamic = 1,
-    Stretched = 2
-}
-
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>
 function Node.new(w, h)
@@ -17,7 +12,7 @@ end
 
 function Node:ctor(w, h)
     self._buffer = Kevlar.CharBuffer.new(w or 1, h or 1)
-    self._sizing = Node.Sizing.Dynamic
+    self._sizing = Kevlar.Sizing.Dynamic
 end
 
 --- <summary></summary>
@@ -72,7 +67,7 @@ function Node:computeHeight(w)
     return 1
 end
 
---- <returns type="Kevlar.Node.Sizing"></returns>
+--- <returns type="Kevlar.Sizing"></returns>
 function Node:getSizing()
     return self._sizing
 end
