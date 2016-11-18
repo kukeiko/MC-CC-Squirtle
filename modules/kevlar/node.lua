@@ -12,6 +12,7 @@ end
 
 function Node:ctor(w, h)
     self._buffer = Kevlar.CharBuffer.new(w or 1, h or 1)
+    self._em = Core.EventManager.new()
     self._sizing = Kevlar.Sizing.Dynamic
 end
 
@@ -74,6 +75,24 @@ end
 
 function Node:setSizing(sizing)
     self._sizing = sizing
+end
+
+function Node:dispatchEvent(event)
+    event = Kevlar.Event.as(event)
+
+    self._em:raise("UiEvent:"..event:getType(), event)
+    
+    if(not event:isConsumed()) then
+        self._em:raise("UiEventNotConsumed")
+    end
+end
+
+function Node:onEvent(type, handler)
+    self._em:on("UiEvent:"..type, handler)
+end
+
+function Node:onEventNotConsumed(handler)
+    self._em:on("UiEventNotConsumed", handler)
 end
 
 if (Kevlar == nil) then Kevlar = { } end

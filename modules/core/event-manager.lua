@@ -2,7 +2,7 @@ local EventManager = { }
 
 --- <summary>
 --- </summary>
---- <returns type="EventManager"></returns>
+--- <returns type="Core.EventManager"></returns>
 function EventManager.new()
     local instance = { }
     setmetatable(instance, { __index = EventManager })

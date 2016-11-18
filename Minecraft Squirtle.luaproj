@@ -47,6 +47,7 @@
     <Compile Include="modules\core\utils.lua" />
     <Compile Include="modules\kevlar\branch.lua" />
     <Compile Include="modules\kevlar\char-buffer.lua" />
+    <Compile Include="modules\kevlar\event.lua" />
     <Compile Include="modules\kevlar\h-branch.lua" />
     <Compile Include="modules\kevlar\kevlar.lua" />
     <Compile Include="modules\kevlar\header.lua" />

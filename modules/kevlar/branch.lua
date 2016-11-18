@@ -42,5 +42,18 @@ function Branch:getChildByName(name)
     return self._childMap[name]
 end
 
+function Branch:dispatchEvent(event)
+    child = Kevlar.Node.as(nil)
+    event = Kevlar.Event.as(event)
+
+    for k, child in ipairs(self:getChildren()) do
+        child:dispatchEvent(event)
+
+        if (event:isConsumed()) then
+            break
+        end
+    end
+end
+
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.Branch = Branch

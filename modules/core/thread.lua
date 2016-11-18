@@ -19,6 +19,8 @@ local Thread = {
     _nextThreadId = 1
 }
 
+--- <summary></summary>
+--- <returns type="Core.Thread"></returns>
 function Thread.new(func, ...)
     local instance = { }
     setmetatable(instance, { __index = Thread })
@@ -88,7 +90,7 @@ function Thread:runSync()
 
     while (true) do
         local params = { coroutine.resume(coro, unpack(args)) }
---        local success = table.remove(params, 1)
+        --        local success = table.remove(params, 1)
 
         if (coroutine.status(coro) == "dead") then
             return unpack(params)

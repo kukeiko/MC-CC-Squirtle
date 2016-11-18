@@ -54,5 +54,11 @@ function Window:setTitle(title)
     self._title = title
 end
 
+function Window:dispatchEvent(event)
+    if(self._content == nil) then return end
+
+    self._content:dispatchEvent(event)
+end
+
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.Window = Window

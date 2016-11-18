@@ -25,6 +25,18 @@ end
 function Text:ctor(text, align)
     self._text = text
     self._align = align
+
+    self:base():onEvent(Kevlar.Event.Type.Char, function(ev)
+        self._text = self._text .. ev:getValue()
+    end )
+
+    self:base():onEvent(Kevlar.Event.Type.Key, function(ev)
+        local key = ev:getValue()
+
+        if (key == keys.backspace) then
+            self._text = string.sub(self._text, 1, math.max(0, #self._text - 1))
+        end
+    end )
 end
 
 --- <summary></summary>

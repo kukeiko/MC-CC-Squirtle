@@ -36,19 +36,36 @@ function Shell:run()
 
     local x = 0
     local y = 0
+    local win = Kevlar.Window.as(nil)
+    local event = Kevlar.Event.as(nil)
 
     repeat
-        local win = windows[winIndex]
+        win = windows[winIndex]
         win:update()
         win:draw(t, x, y)
 
-        local key = Core.MessagePump.pull("key")
+        local ev, value = Core.MessagePump.pullMany("key", "char")
 
-        if (key == keys.tab) then
-            winIndex = winIndex + 1
-            if (winIndex > #windows) then
-                winIndex = 1
+        if (ev == "key") then
+            event = Kevlar.Event.new(Kevlar.Event.Type.Key, value)
+        elseif (ev == "char") then
+            event = Kevlar.Event.new(Kevlar.Event.Type.Char, value)
+        end
+
+        if (event:getType() == Kevlar.Event.Type.Key) then
+            if (event:getValue() == keys.tab) then
+                event:consume()
+
+                winIndex = winIndex + 1
+
+                if (winIndex > #windows) then
+                    winIndex = 1
+                end
             end
+        end
+
+        if (not event:isConsumed()) then
+            win:dispatchEvent(event)
         end
 
         if (key == keys.a) then
