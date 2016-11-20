@@ -37,16 +37,26 @@ function VerticalBranch:update()
     local eligible = { }
     local minHeights = { }
 
+    buffer:clear()
+
     for i, child in ipairs(children) do
-        local minHeight = child:computeHeight(wMax)
+        local minHeight
+        local sizingMode = child:getSizing()
+
+        if (sizingMode == Kevlar.Sizing.Fixed) then
+            minHeight = child:getHeight()
+        else
+            minHeight = child:computeHeight(wMax)
+
+            if (sizingMode == Kevlar.Sizing.Stretched) then
+                table.insert(stretched, i)
+            end
+        end
+
         hUsed = hUsed + math.max(minHeight, 1)
 
         table.insert(eligible, child)
         table.insert(minHeights, minHeight)
-
-        if (child:getSizing() == Kevlar.Sizing.Stretched) then
-            table.insert(stretched, i)
-        end
 
         if (hUsed >= hMax) then
             break
@@ -73,8 +83,13 @@ function VerticalBranch:update()
     local yOffset = 0
     for i, child in ipairs(eligible) do
         local minHeight = minHeights[i]
+        local w = wMax
 
-        child:setSize(wMax, minHeight)
+        if (child:getSizing() == Kevlar.Sizing.Fixed) then
+            w = child:getWidth()
+        end
+
+        child:setSize(w, minHeight)
         child:update()
         child:draw(buffer:base():sub(1, yOffset + 1, "*", minHeight))
 

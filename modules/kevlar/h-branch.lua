@@ -32,6 +32,8 @@ function HorizontalBranch:update()
     local sizes = self:computeChildSizes(buffer:getWidth())
     local xOffset = 0
 
+    buffer:clear()
+
     for i, size in ipairs(sizes) do
         child = self:getChildren()[i]
         child:setSize(size.w, size.h)
@@ -64,15 +66,23 @@ function HorizontalBranch:computeChildSizes(wMax)
     local minWidths = { }
 
     for i, child in ipairs(self:getChildren()) do
-        local minWidth = child:computeWidth(nil)
+        local minWidth
+        local sizingMode = child:getSizing()
+
+        if (sizingMode == Kevlar.Sizing.Fixed) then
+            minWidth = child:getWidth()
+        else
+            minWidth = child:computeWidth(nil)
+
+            if (sizingMode == Kevlar.Sizing.Stretched) then
+                table.insert(stretched, i)
+            end
+        end
+
         wUsed = wUsed + minWidth
 
         table.insert(eligible, child)
         table.insert(minWidths, minWidth)
-
-        if (child:getSizing() == Kevlar.Sizing.Stretched) then
-            table.insert(stretched, i)
-        end
 
         if (wUsed >= wMax) then
             break
@@ -98,7 +108,13 @@ function HorizontalBranch:computeChildSizes(wMax)
 
     for i, child in ipairs(eligible) do
         local w = minWidths[i]
-        local h = child:computeHeight(w)
+        local h
+
+        if (child:getSizing() == Kevlar.Sizing.Fixed) then
+            h = child:getHeight()
+        else
+            h = child:computeHeight(w)
+        end
 
         table.insert(sizes, { h = h, w = w })
     end

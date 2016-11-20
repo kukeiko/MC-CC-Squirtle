@@ -72,12 +72,12 @@ end
 function Shell:createTestWindow(terminal, text)
     terminal = Kevlar.Terminal.as(terminal)
 
-    local vb = Kevlar.VerticalBranch.new()
+    local vb = Kevlar.HorizontalBranch.new()
     local textboxA = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
     local textboxB = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
-    --    textboxA:setSizing(Kevlar.Sizing.Fixed)
-    --    textboxB:setSizing(Kevlar.Sizing.Fixed)
-
+    textboxA:setSizing(Kevlar.Sizing.Stretched)
+    textboxB:setSizing(Kevlar.Sizing.Stretched)
+--    textboxA:setHeight(11)
     vb:addChild(textboxA)
     vb:addChild(textboxB)
 

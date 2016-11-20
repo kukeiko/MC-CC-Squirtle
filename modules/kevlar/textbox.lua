@@ -71,7 +71,7 @@ end
 
 --- <returns type="number"></returns>
 function Textbox:computeWidth(h)
-    return self:getLength()
+    return 1
 end
 
 --- <returns type="number"></returns>
