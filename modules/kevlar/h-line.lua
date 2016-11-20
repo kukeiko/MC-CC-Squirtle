@@ -1,13 +1,13 @@
 local HLine = { }
 
-
 --- <summary>
 --- A line drawn horicontally, repeating the given string
 --- </summary>
 --- <returns type="Kevlar.HLine"></returns>
 function HLine.new(str)
-    local instance = { }
+    local instance = Kevlar.Node.new()
     setmetatable(instance, { __index = HLine })
+    setmetatable(HLine, { __index = Kevlar.Node })
 
     str = str or "-"
     instance:ctor(str)
@@ -21,15 +21,22 @@ end
 
 --- <summary></summary>
 --- <returns type="Kevlar.HLine"></returns>
-function HLine.cast(instance) return instance end
+function HLine.as(instance) return instance end
 
-function HLine:draw(charSpace)
-    charSpace = Kevlar.ICharSpace.as(charSpace)
+--- <summary></summary>
+--- <returns type="Kevlar.Node"></returns>
+function HLine:base() return self end
 
+--- <summary></summary>
+--- <returns type="Kevlar.Node"></returns>
+function HLine.super() return Kevlar.Node end
+
+function HLine:update()
+    local buffer = self:base():getBuffer()
     local i = 1
 
-    for x = 1, charSpace:getWidth() do
-        charSpace:write(x, 1, self._str:sub(i, i))
+    for x = 1, buffer:getWidth() do
+        buffer:write(x, 1, self._str:sub(i, i))
         i =(i % #self._str) + 1
     end
 end

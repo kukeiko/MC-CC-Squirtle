@@ -103,10 +103,33 @@ function VerticalBranch:computeHeight(w)
     local h = 0
 
     for i, child in ipairs(self:getChildren()) do
-        h = h + math.max(child:computeHeight(w), 1)
+        if (child:getSizing() == Kevlar.Sizing.Fixed) then
+            h = h + child:getHeight()
+        else
+            h = h + child:computeHeight(w)
+        end
     end
 
     return h
+end
+
+function VerticalBranch:computeWidth(h)
+    local child = Kevlar.Node.as(nil)
+    local highest = 0
+
+    for i, child in ipairs(self:getChildren()) do
+        local w
+
+        if (child:getSizing() == Kevlar.Sizing.Fixed) then
+            w = child:getWidth()
+        else
+            w = child:computeWidth(h)
+        end
+    end
+
+    highest = math.max(highest, w)
+
+    return highest
 end
 
 function VerticalBranch:addChild(node, name)

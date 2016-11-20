@@ -72,16 +72,13 @@ end
 function Shell:createTestWindow(terminal, text)
     terminal = Kevlar.Terminal.as(terminal)
 
-    local vb = Kevlar.HorizontalBranch.new()
-    local textboxA = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
-    local textboxB = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
-    textboxA:setSizing(Kevlar.Sizing.Stretched)
-    textboxB:setSizing(Kevlar.Sizing.Stretched)
---    textboxA:setHeight(11)
-    vb:addChild(textboxA)
-    vb:addChild(textboxB)
+    local list = Kevlar.SearchableList.new()
 
-    return Kevlar.Window.new(text, vb, terminal:getSize())
+    for i = 1, 21 do
+        list:addItem("item " .. i, function() end)
+    end
+
+    return Kevlar.Window.new(text, list, terminal:getSize())
 end
 
 if (Squirtle == nil) then Squirtle = { } end

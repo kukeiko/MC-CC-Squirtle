@@ -2,22 +2,20 @@ local Textbox = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Textbox"></returns>
-function Textbox.new(text, align, w)
+function Textbox.new(text, w)
     local instance = Kevlar.Node.new(w, 1)
     setmetatable(instance, { __index = Textbox })
     setmetatable(Textbox, { __index = Kevlar.Node })
 
     text = text or ""
-    align = align or Textbox.Align.Left
 
     instance:ctor(text, align)
 
     return instance
 end
 
-function Textbox:ctor(text, align)
+function Textbox:ctor(text)
     self._text = text
-    self._align = align
 
     self:base():onEvent(Kevlar.Event.Type.Char, function(ev)
         self._text = self._text .. ev:getValue()
@@ -78,9 +76,6 @@ end
 function Textbox:computeHeight(w)
     return 1
 end
-
-function Textbox:setAlign(align) self._align = align end
-function Textbox:getAlign() return self._align end
 
 --- <returns type="Kevlar.Sizing"></returns>
 function Textbox:getSizing()
