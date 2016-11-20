@@ -34,15 +34,14 @@ function Shell:run()
     table.insert(windows, self:createTestWindow(t, "Bar"))
     table.insert(windows, self:createTestWindow(t, "Baz"))
 
-    local x = 0
-    local y = 0
     local win = Kevlar.Window.as(nil)
     local event = Kevlar.Event.as(nil)
 
     repeat
         win = windows[winIndex]
         win:update()
-        win:draw(t, x, y)
+        t:clear()
+        win:draw(t)
 
         local ev, value = Core.MessagePump.pullMany("key", "char")
 
@@ -67,16 +66,6 @@ function Shell:run()
         if (not event:isConsumed()) then
             win:dispatchEvent(event)
         end
-
-        if (key == keys.a) then
-            x = x - 1
-        elseif (key == keys.d) then
-            x = x + 1
-        elseif (key == keys.w) then
-            y = y - 1
-        elseif (key == keys.s) then
-            y = y + 1
-        end
     until false
 end
 
@@ -84,22 +73,13 @@ function Shell:createTestWindow(terminal, text)
     terminal = Kevlar.Terminal.as(terminal)
 
     local vb = Kevlar.VerticalBranch.new()
-    local hb = Kevlar.HorizontalBranch.new()
-    hb:setSizing(Kevlar.Sizing.Stretched)
-    vb:addChild(hb)
+    local textboxA = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
+    local textboxB = Kevlar.Textbox.new("", Kevlar.TextAlign.Left, 10)
+    --    textboxA:setSizing(Kevlar.Sizing.Fixed)
+    --    textboxB:setSizing(Kevlar.Sizing.Fixed)
 
-    local khazText = Kevlar.Text.new(text, Kevlar.Text.Align.Center)
-    khazText:setSizing(Kevlar.Sizing.Stretched)
-    hb:addChild(khazText)
-
-
-    local moText = Kevlar.Text.new(text, Kevlar.Text.Align.Center)
-    moText:setSizing(Kevlar.Sizing.Stretched)
-    hb:addChild(moText)
-
-    local quakText = Kevlar.Text.new(text)
-    quakText:setSizing(Kevlar.Sizing.Stretched)
-    vb:addChild(quakText)
+    vb:addChild(textboxA)
+    vb:addChild(textboxB)
 
     return Kevlar.Window.new(text, vb, terminal:getSize())
 end

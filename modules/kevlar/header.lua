@@ -13,7 +13,7 @@ function Header.new(title, lineStr)
 end
 
 function Header:ctor(title, lineStr)
-    self._text = Kevlar.Text.new(title, Kevlar.Text.Align.Center)
+    self._text = Kevlar.Text.new(title, Kevlar.TextAlign.Center)
     self._line = Kevlar.HLine.new(lineStr)
 end
 
@@ -27,7 +27,7 @@ end
 
 function Header:draw(charSpace)
     charSpace = Kevlar.ICharSpace.as(charSpace)
-    ---, charSpace:sub(1, 2, "*", 1)
+    --- , charSpace:sub(1, 2, "*", 1)
     self._text:draw(charSpace:sub(1, 1, "*", 1))
     self._line:draw(charSpace:sub(1, 2, "*", 1))
 end

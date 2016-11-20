@@ -1,12 +1,5 @@
 local Text = { }
 
-Text.Align = {
-    Left = 1,
-    Center = 2,
-    Right = 3,
-    Justify = 4
-}
-
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
 function Text.new(text, align, w, h)
@@ -15,7 +8,7 @@ function Text.new(text, align, w, h)
     setmetatable(Text, { __index = Kevlar.Node })
 
     text = text or ""
-    align = align or Text.Align.Left
+    align = align or TextAlign.Left
 
     instance:ctor(text, align)
 
@@ -25,18 +18,6 @@ end
 function Text:ctor(text, align)
     self._text = text
     self._align = align
-
-    self:base():onEvent(Kevlar.Event.Type.Char, function(ev)
-        self._text = self._text .. ev:getValue()
-    end )
-
-    self:base():onEvent(Kevlar.Event.Type.Key, function(ev)
-        local key = ev:getValue()
-
-        if (key == keys.backspace) then
-            self._text = string.sub(self._text, 1, math.max(0, #self._text - 1))
-        end
-    end )
 end
 
 --- <summary></summary>
@@ -134,8 +115,8 @@ function Text:formatLines(width, maxNumLines, align)
 end
 
 function Text:formatLine(line, width, align)
-    if (align == Text.Align.Justify) then
-        if (#line == 1) then return self:formatLine(line, width, Text.Align.Left) end
+    if (align == TextAlign.Justify) then
+        if (#line == 1) then return self:formatLine(line, width, TextAlign.Left) end
 
         local length = #(table.concat(line, ""))
         local rest = width - length
@@ -143,7 +124,7 @@ function Text:formatLine(line, width, align)
         local leftOver = rest %(#line - 1)
 
         if (length < numSpacesEach * #line) then
-            return self:formatLine(line, width, Text.Align.Left)
+            return self:formatLine(line, width, TextAlign.Left)
         end
 
         local lineText = ""
@@ -169,16 +150,16 @@ function Text:formatLine(line, width, align)
         local lineText = table.concat(line, " ")
         if (#lineText > width) then lineText = lineText:sub(1, width) end
 
-        if (align == Text.Align.Center) then
+        if (align == TextAlign.Center) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
 
             return string.rep(" ", math.ceil(rest / 2)) .. lineText .. string.rep(" ", math.floor(rest / 2))
-        elseif (align == Text.Align.Left) then
+        elseif (align == TextAlign.Left) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
             return lineText .. string.rep(" ", rest)
-        elseif (align == Text.Align.Right) then
+        elseif (align == TextAlign.Right) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
 

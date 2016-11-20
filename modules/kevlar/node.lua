@@ -80,19 +80,11 @@ end
 function Node:dispatchEvent(event)
     event = Kevlar.Event.as(event)
 
-    self._em:raise("UiEvent:"..event:getType(), event)
-    
-    if(not event:isConsumed()) then
-        self._em:raise("UiEventNotConsumed")
-    end
+    self._em:raise("UiEvent:" .. event:getType(), event)
 end
 
 function Node:onEvent(type, handler)
-    self._em:on("UiEvent:"..type, handler)
-end
-
-function Node:onEventNotConsumed(handler)
-    self._em:on("UiEventNotConsumed", handler)
+    self._em:on("UiEvent:" .. type, handler)
 end
 
 if (Kevlar == nil) then Kevlar = { } end

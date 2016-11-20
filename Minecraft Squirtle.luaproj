@@ -60,6 +60,7 @@
     <Compile Include="modules\kevlar\sync\wizard.lua" />
     <Compile Include="modules\kevlar\terminal.lua" />
     <Compile Include="modules\kevlar\text.lua" />
+    <Compile Include="modules\kevlar\textbox.lua" />
     <Compile Include="modules\kevlar\v-branch.lua" />
     <Compile Include="modules\kevlar\virtual-char-space.lua" />
     <Compile Include="modules\kevlar\window.lua" />
