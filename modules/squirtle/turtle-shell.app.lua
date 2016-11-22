@@ -1,40 +1,28 @@
 local TurtleShell = { }
 
-function TurtleShell.new(unit, charSpace)
+function TurtleShell.new(kernel, win)
     local instance = { }
     setmetatable(instance, { __index = TurtleShell })
 
-    instance:ctor(unit, charSpace)
+    instance:ctor(kernel, win)
 
     return instance
 end
 
-function TurtleShell:ctor(unit, charSpace)
-    self._unit = Squirtle.Unit.as(unit)
-    self._charSpace = Kevlar.ICharSpace.as(charSpace)
+function TurtleShell:ctor(kernel, win)
+    self._kernel = Squirtle.Kernel.as(kernel)
+    self._window = Kevlar.Window.as(win)
 end
 
 function TurtleShell:run()
-    local header = Kevlar.Header.new("Shell", "-", self._charSpace:sub(1, 1, "*", 1))
-    header:draw()
+    local list = Kevlar.SearchableList.new()
+    local apps = self._kernel:getAvailableApps()
 
-    local content = self._charSpace:sub(1, 3, "*", "*")
-    self:loop(content)
-end
-
-function TurtleShell:loop(content)
-    local apps = self._unit:getAvailableApps()
-    local selection = Kevlar.Sync.Select.new(content)
-
-    for k, v in pairs(apps) do
-        selection:addOption(k, v)
+    for name, app in pairs(apps) do
+        list:addItem(name, function() self._kernel:runApp(app) end)
     end
 
-    local app = selection:run()
-    print(app)
-
-    local t = Squirtle.Turtle.as(self._unit)
-    t:navigateTo(Core.Vector.new(208, 71, 191))
+    self._window:setContent(list)
 end
 
 if (Squirtle == nil) then Squirtle = { } end

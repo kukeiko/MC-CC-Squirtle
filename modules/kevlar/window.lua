@@ -2,18 +2,17 @@ local Window = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Window"></returns>
-function Window.new(title, content, w, h)
+function Window.new(content, w, h)
     local instance = Kevlar.Node.new(w, h)
     setmetatable(instance, { __index = Window })
     setmetatable(Window, { __index = Kevlar.Node })
 
-    instance:ctor(title, content)
+    instance:ctor(content)
 
     return instance
 end
 
-function Window:ctor(title, content)
---    self._title = Kevlar.Text.new(title or "W
+function Window:ctor(content)
     self._content = Kevlar.Node.as(content)
 end
 
@@ -44,14 +43,6 @@ end
 
 function Window:setContent(content)
     self._content = content
-end
-
-function Window:getTitle()
-    return self._title
-end
-
-function Window:setTitle(title)
-    self._title = title
 end
 
 function Window:dispatchEvent(event)

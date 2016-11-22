@@ -14,6 +14,9 @@ end
 
 function Shell:ctor(kernel)
     self._kernel = Squirtle.Kernel.as(kernel)
+    self._windows = { }
+    self._charSpaces = { }
+    self._winIndex = 1
 end
 
 --- <summary></summary>
@@ -21,64 +24,64 @@ end
 function Shell.as(instance) return instance end
 
 function Shell:run()
-    --    local mtr = peripheral.wrap("front")
-    --    term.redirect(mtr)
-    local t = Kevlar.Terminal.new(term.current())
-
-    local winIndex = 1
-    local windows = { }
-    table.insert(windows, self:createTestWindow(t, "Khaz"))
-    table.insert(windows, self:createTestWindow(t, "Mo"))
-    table.insert(windows, self:createTestWindow(t, "Dan"))
-    table.insert(windows, self:createTestWindow(t, "Foo"))
-    table.insert(windows, self:createTestWindow(t, "Bar"))
-    table.insert(windows, self:createTestWindow(t, "Baz"))
-
     local win = Kevlar.Window.as(nil)
+    local charSpace = Kevlar.CharSpace.as(nil)
     local event = Kevlar.Event.as(nil)
 
     repeat
-        win = windows[winIndex]
-        win:update()
-        t:clear()
-        win:draw(t)
-
-        local ev, value = Core.MessagePump.pullMany("key", "char")
+        local ev, value = Core.MessagePump.pullMany("key", "char", "Squirtle.Shell:Redraw")
 
         if (ev == "key") then
             event = Kevlar.Event.new(Kevlar.Event.Type.Key, value)
         elseif (ev == "char") then
             event = Kevlar.Event.new(Kevlar.Event.Type.Char, value)
+        else
+            event = nil
         end
 
-        if (event:getType() == Kevlar.Event.Type.Key) then
+        if (event and event:getType() == Kevlar.Event.Type.Key) then
             if (event:getValue() == keys.tab) then
                 event:consume()
 
-                winIndex = winIndex + 1
+                self._winIndex = self._winIndex + 1
 
-                if (winIndex > #windows) then
-                    winIndex = 1
+                if (self._winIndex > #self._windows) then
+                    self._winIndex = 1
                 end
             end
         end
 
-        if (not event:isConsumed()) then
-            win:dispatchEvent(event)
+        win = self._windows[self._winIndex]
+        charSpace = self._charSpaces[self._winIndex]
+
+        if (win and charSpace) then
+            if (event and not event:isConsumed()) then
+                win:dispatchEvent(event)
+            end
+
+            win:update()
+            charSpace:clear()
+            win:draw(charSpace)
         end
     until false
 end
 
-function Shell:createTestWindow(terminal, text)
-    terminal = Kevlar.Terminal.as(terminal)
+function Shell:openWindow(charSpace)
+    charSpace = Kevlar.CharSpace.as(charSpace)
 
-    local list = Kevlar.SearchableList.new()
+    local win = Kevlar.Window.new(nil, charSpace:getSize())
 
-    for i = 1, 21 do
-        list:addItem("item " .. i, function() end)
-    end
+    table.insert(self._windows, win)
+    table.insert(self._charSpaces, charSpace)
+    self._winIndex = #self._windows
 
-    return Kevlar.Window.new(text, list, terminal:getSize())
+    Core.MessagePump.queue("Squirtle.Shell:Redraw")
+
+    return win
+end
+
+function Shell:closeWindow(win)
+    --- todo: implement
 end
 
 if (Squirtle == nil) then Squirtle = { } end

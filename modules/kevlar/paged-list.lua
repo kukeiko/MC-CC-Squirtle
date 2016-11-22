@@ -27,6 +27,11 @@ function PagedList:ctor()
             self._pageIndex = self._pageIndex - 1
         elseif (key == keys.right) then
             self._pageIndex = self._pageIndex + 1
+        elseif (key == keys.enter) then
+            local item = self._items[self._selectionIndex]
+            if (item and item.handler) then
+                item.handler()
+            end
         end
     end )
 end
