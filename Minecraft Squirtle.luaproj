@@ -25,6 +25,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="modules\squirtle\test\test.app.lua" />
+    <Content Include="modules\squirtle\test\test.task.lua" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="modules\" />
@@ -33,6 +35,7 @@
     <Folder Include="modules\kevlar\sync\" />
     <Folder Include="modules\scout\" />
     <Folder Include="modules\squirtle\" />
+    <Folder Include="modules\squirtle\test\" />
     <Folder Include="modules\unity\" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +80,9 @@
     <Compile Include="modules\squirtle\kernel.lua" />
     <Compile Include="modules\squirtle\peripherals.lua" />
     <Compile Include="modules\squirtle\shell.lua" />
+    <Compile Include="modules\squirtle\task-handle.lua" />
+    <Compile Include="modules\squirtle\task-queue.lua" />
+    <Compile Include="modules\squirtle\task.lua" />
     <Compile Include="modules\squirtle\turtle-shell.app.lua" />
     <Compile Include="modules\squirtle\tablet.lua" />
     <Compile Include="modules\squirtle\turtle.lua" />

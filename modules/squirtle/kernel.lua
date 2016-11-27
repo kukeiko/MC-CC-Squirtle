@@ -15,6 +15,7 @@ end
 function Kernel:ctor()
     self._shell = Squirtle.Shell.new(self)
     self._unit = Squirtle.Unit.as(nil)
+    self._taskQueue = Squirtle.TaskQueue.new()
 
     if (turtle) then
         self._unit = Squirtle.Turtle.new()
@@ -52,7 +53,7 @@ function Kernel:run()
     end , "kill-kernel-handler")
 
     Core.MessagePump.create(nil, function()
-        --- todo: implement
+        self._taskQueue:run()
     end , "task-queue")
 
     Core.MessagePump.create(nil, function()
@@ -60,6 +61,7 @@ function Kernel:run()
     end , "shell")
 
     Core.MessagePump.run( function()
+        self._unit:load()
         self:runApp(Squirtle.Apps.TurtleShell)
     end )
 end
@@ -94,13 +96,19 @@ function Kernel:runApp(app, charSpace)
     end )
 end
 
-function Kernel:runTask(task)
+function Kernel:runTask(taskType, ...)
+    local task = taskType.new(self, ...)
+    self._taskQueue:queue(task)
 end
 
 function Kernel:startService(service)
 end
 
 function Kernel:stopService(service)
+end
+
+function Kernel:getUnit()
+    return self._unit
 end
 
 if (Squirtle == nil) then Squirtle = { } end

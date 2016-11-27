@@ -39,7 +39,7 @@ function Turtle:load()
     self._wirelessAdapter = Unity.Adapter.new(address, modem, side)
 
     local compass = self._equipment:equip("minecraft:compass")
-    
+
     -- todo: what a hack!
     self._orientation = compass.getFacing()
     self._orientation = Core.Direction[string.upper(self._orientation:sub(1, 1)) .. self._orientation:sub(2)]
@@ -304,7 +304,7 @@ function Turtle:tryWalkPathPeaceful(path)
 
     local success
     self:getFueling():refuel(#path)
-    
+
     for k, v in ipairs(path) do
         local delta = v - self:getLocation()
 
@@ -365,7 +365,7 @@ end
 function Turtle:navigateTo(target)
     local world = { }
     local points = { }
-    
+
     local scan = function()
         if (self._turtleApi:detect(Core.Side.Top)) then
             local point = self:getLocation() + Core.Vector.new(0, 1, 0)
@@ -387,7 +387,7 @@ function Turtle:navigateTo(target)
 
     while (true) do
         scan()
-        
+
         local thread = Core.Thread.new( function()
             return Core.Pathing.aStarPruning(world, self:getLocation(), target, self:getOrientation())
         end )
