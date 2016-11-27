@@ -8,7 +8,7 @@ function Text.new(text, align, w, h)
     setmetatable(Text, { __index = Kevlar.Node })
 
     text = text or ""
-    align = align or TextAlign.Left
+    align = align or Kevlar.TextAlign.Left
 
     instance:ctor(text, align)
 
@@ -66,7 +66,11 @@ function Text:computeWidth(h)
 
         return highest
     else
-        error("Text:computeWidth(h) not implemented")
+        if (h == 1) then
+            return #self:getText()
+        else
+            error("Text:computeWidth(h) not implemented with h => not nil and not 1")
+        end
     end
 end
 
@@ -115,8 +119,8 @@ function Text:formatLines(width, maxNumLines, align)
 end
 
 function Text:formatLine(line, width, align)
-    if (align == TextAlign.Justify) then
-        if (#line == 1) then return self:formatLine(line, width, TextAlign.Left) end
+    if (align == Kevlar.TextAlign.Justify) then
+        if (#line == 1) then return self:formatLine(line, width, Kevlar.TextAlign.Left) end
 
         local length = #(table.concat(line, ""))
         local rest = width - length
@@ -124,7 +128,7 @@ function Text:formatLine(line, width, align)
         local leftOver = rest %(#line - 1)
 
         if (length < numSpacesEach * #line) then
-            return self:formatLine(line, width, TextAlign.Left)
+            return self:formatLine(line, width, Kevlar.TextAlign.Left)
         end
 
         local lineText = ""
@@ -150,16 +154,16 @@ function Text:formatLine(line, width, align)
         local lineText = table.concat(line, " ")
         if (#lineText > width) then lineText = lineText:sub(1, width) end
 
-        if (align == TextAlign.Center) then
+        if (align == Kevlar.TextAlign.Center) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
 
             return string.rep(" ", math.ceil(rest / 2)) .. lineText .. string.rep(" ", math.floor(rest / 2))
-        elseif (align == TextAlign.Left) then
+        elseif (align == Kevlar.TextAlign.Left) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
             return lineText .. string.rep(" ", rest)
-        elseif (align == TextAlign.Right) then
+        elseif (align == Kevlar.TextAlign.Right) then
             local rest = width - #lineText
             if (rest < 0) then return lineText end
 

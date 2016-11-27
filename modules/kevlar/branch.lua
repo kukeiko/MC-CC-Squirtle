@@ -15,6 +15,7 @@ function Branch:ctor()
     self._nextChildId = 1
     self._children = { }
     self._childMap = { }
+    self._align = Kevlar.ContentAlign.Start
 end
 
 --- <summary></summary>
@@ -42,6 +43,20 @@ function Branch:getChildByName(name)
     return self._childMap[name]
 end
 
+function Branch:removeChildren()
+    self._children = { }
+    self._childMap = { }
+    self._nextChildId = 1
+end
+
+function Branch:setAlign(align)
+    self._align = align
+end
+
+function Branch:getAlign()
+    return self._align
+end
+
 function Branch:dispatchEvent(event)
     child = Kevlar.Node.as(nil)
     event = Kevlar.Event.as(event)
@@ -52,6 +67,10 @@ function Branch:dispatchEvent(event)
         if (event:isConsumed()) then
             break
         end
+    end
+
+    if (not event:isConsumed()) then
+        Kevlar.Node.dispatchEvent(self, event)
     end
 end
 

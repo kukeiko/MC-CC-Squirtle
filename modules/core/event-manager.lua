@@ -15,6 +15,10 @@ function EventManager:ctor()
     self._handlers = { }
 end
 
+function EventManager:clear()
+    self._handlers = { }
+end
+
 function EventManager:on(name, handler)
     if (self._handlers[name] == nil) then
         self._handlers[name] = { }

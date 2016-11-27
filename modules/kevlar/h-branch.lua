@@ -34,6 +34,18 @@ function HorizontalBranch:update()
 
     buffer:clear()
 
+    local wUsed = 0
+    for i, size in ipairs(sizes) do wUsed = wUsed + size.w end
+    local wRemaining = buffer:getWidth() - wUsed
+
+    if (wRemaining > 0) then
+        if (self:getAlign() == Kevlar.ContentAlign.Center) then
+            xOffset = math.floor(wRemaining / 2)
+        elseif (self:getAlign() == Kevlar.ContentAlign.End) then
+            xOffset = wRemaining
+        end
+    end
+
     for i, size in ipairs(sizes) do
         child = self:getChildren()[i]
         child:setSize(size.w, size.h)
@@ -63,6 +75,7 @@ function HorizontalBranch:computeChildSizes(wMax)
     local wUsed = 0
     local eligible = { }
     local stretched = { }
+    local dynamic = { }
     local minWidths = { }
 
     for i, child in ipairs(self:getChildren()) do
@@ -76,6 +89,8 @@ function HorizontalBranch:computeChildSizes(wMax)
 
             if (sizingMode == Kevlar.Sizing.Stretched) then
                 table.insert(stretched, i)
+            elseif (sizingMode == Kevlar.Sizing.Dynamic) then
+                table.insert(dynamic, i)
             end
         end
 
@@ -90,16 +105,35 @@ function HorizontalBranch:computeChildSizes(wMax)
     end
 
     --- allocate extra space for stretched
-    if (wUsed < wMax and #stretched > 0) then
+    if (wUsed < wMax) then
         local remaining = wMax - wUsed
-        local wEach = math.floor(remaining / #stretched)
-        remaining = remaining -(wEach * #stretched)
 
-        for i, v in ipairs(stretched) do
-            if (i <= remaining) then
-                minWidths[v] = minWidths[v] + wEach + 1
-            else
-                minWidths[v] = minWidths[v] + wEach
+        if (#stretched > 0) then
+            local wEach = math.floor(remaining / #stretched)
+            remaining = remaining -(wEach * #stretched)
+
+            for i, v in ipairs(stretched) do
+                if (i <= remaining) then
+                    minWidths[v] = minWidths[v] + wEach + 1
+                else
+                    minWidths[v] = minWidths[v] + wEach
+                end
+            end
+        elseif (#dynamic > 0) then
+            for k, i in ipairs(dynamic) do
+                child = eligible[i]
+
+                local possibleWidth = child:computeWidth(1)
+
+                if (possibleWidth > minWidths[i]) then
+                    local allocated = math.min(possibleWidth, remaining)
+                    minWidths[i] = allocated
+                    remaining = remaining - allocated
+
+                    if (remaining < 1) then
+                        break
+                    end
+                end
             end
         end
     end
@@ -128,6 +162,18 @@ end
 
 function HorizontalBranch:getChildren()
     return self.super().getChildren(self)
+end
+
+function HorizontalBranch:removeChildren()
+    return self.super().removeChildren(self)
+end
+
+function HorizontalBranch:setAlign(align)
+    self.super().setAlign(self, align)
+end
+
+function HorizontalBranch:getAlign()
+    return self.super().getAlign(self)
 end
 
 if (Kevlar == nil) then Kevlar = { } end

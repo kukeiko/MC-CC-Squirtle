@@ -15,14 +15,35 @@ function TestApp:ctor(kernel, win)
 end
 
 function TestApp:run()
-    local list = Kevlar.SearchableList.new()
-    local apps = self._kernel:getAvailableApps()
+    local vb = Kevlar.VerticalBranch.new()
+    local header = Kevlar.Text.new("Test App", Kevlar.TextAlign.Center)
+    local line = Kevlar.HLine.new("-")
 
-    for name, app in pairs(apps) do
-        list:addItem(name, function() self._kernel:runApp(app) end)
+    local menu = Kevlar.Menu.new()
+    local itemvb = Kevlar.VerticalBranch.as(nil)
+
+    for i = 1, 7 do
+        local item = "item " .. i
+
+        --        if (i % 2 == 0) then
+        --            itemvb = Kevlar.VerticalBranch.new()
+        --            local title = Kevlar.Text.new("Title " .. i, Kevlar.TextAlign.Center)
+        --            local desc = Kevlar.Text.new("Description with words that are even longer now", Kevlar.TextAlign.Center)
+
+        --            itemvb:addChild(title)
+        --            itemvb:addChild(desc)
+
+        --            item = itemvb
+        --        end
+
+        menu:addItem(item, function() log("item " .. i .. " invoked") end)
     end
 
-    self._window:setContent(list)
+    vb:addChild(header)
+    vb:addChild(line)
+    vb:addChild(menu)
+
+    self._window:setContent(vb)
 end
 
 if (Squirtle == nil) then Squirtle = { } end

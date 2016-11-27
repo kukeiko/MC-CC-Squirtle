@@ -56,6 +56,7 @@
     <Compile Include="modules\kevlar\header.lua" />
     <Compile Include="modules\kevlar\h-line.lua" />
     <Compile Include="modules\kevlar\char-space.lua" />
+    <Compile Include="modules\kevlar\menu.lua" />
     <Compile Include="modules\kevlar\node.lua" />
     <Compile Include="modules\kevlar\paged-list.lua" />
     <Compile Include="modules\kevlar\proxy-node.lua" />

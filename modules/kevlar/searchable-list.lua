@@ -21,7 +21,6 @@ function SearchableList:ctor(content)
     self._pagedList = Kevlar.PagedList.new()
 
     self._pagedList:setSizing(Kevlar.Sizing.Stretched)
-
     self._vBranch:addChild(self._searchBox, "search-box")
     self._vBranch:addChild(self._hLine, "header-line")
     self._vBranch:addChild(self._pagedList, "paged-list")

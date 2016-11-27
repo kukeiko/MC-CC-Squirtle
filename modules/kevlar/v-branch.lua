@@ -125,9 +125,9 @@ function VerticalBranch:computeWidth(h)
         else
             w = child:computeWidth(h)
         end
-    end
 
-    highest = math.max(highest, w)
+        highest = math.max(highest, w)
+    end
 
     return highest
 end
@@ -138,6 +138,18 @@ end
 
 function VerticalBranch:getChildren()
     return self.super().getChildren(self)
+end
+
+function VerticalBranch:removeChildren()
+    return self.super().removeChildren(self)
+end
+
+function VerticalBranch:setAlign(align)
+    self.super().setAlign(self, align)
+end
+
+function VerticalBranch:getAlign()
+    return self.super().getAlign(self)
 end
 
 if (Kevlar == nil) then Kevlar = { } end

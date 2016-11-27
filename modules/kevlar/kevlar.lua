@@ -14,3 +14,9 @@ Kevlar.TextAlign = {
     Right = 3,
     Justify = 4
 }
+
+Kevlar.ContentAlign = {
+    Start = 1,
+    Center = 2,
+    End = 3
+}

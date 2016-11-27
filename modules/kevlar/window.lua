@@ -46,7 +46,7 @@ function Window:setContent(content)
 end
 
 function Window:dispatchEvent(event)
-    if(self._content == nil) then return end
+    if (self._content == nil) then return end
 
     self._content:dispatchEvent(event)
 end
