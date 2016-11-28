@@ -11,7 +11,7 @@ SelectBox.Options = {
 --- <summary></summary>
 --- <returns type="Kevlar.SelectBox"></returns>
 function SelectBox.new(opts)
-    local instance = Kevlar.ProxyNode.new(Kevlar.HorizontalBranch.new(opts))
+    local instance = Kevlar.ProxyNode.new(Kevlar.Text.new(opts))
 
     setmetatable(instance, { __index = SelectBox })
     setmetatable(SelectBox, { __index = Kevlar.ProxyNode })
@@ -23,10 +23,8 @@ end
 
 function SelectBox:ctor(opts)
     self._items = { }
-    self._hBranch = Kevlar.HorizontalBranch.as(self:base():getProxied())
+    self._label = Kevlar.Text.as(self:base():getProxied())
     self._selectedIndex = 1
-    self._label = Kevlar.Text.new()
-    self._hBranch:addChild(self._label)
 
     self:base():onEvent(Kevlar.Event.Type.Key, function(ev)
         local key = ev:getValue()
@@ -87,6 +85,20 @@ function SelectBox.super() return Kevlar.ProxyNode end
 
 function SelectBox:update()
     SelectBox.super().update(self)
+end
+
+function SelectBox:computeWidth(h)
+    if (self:base():getSizing() == Kevlar.Sizing.Stretched) then
+        local highest = 1
+
+        for i, item in ipairs(self._items) do
+            highest = math.max(highest, #item.text)
+        end
+
+        return highest
+    else
+        return self._proxied:computeWidth(h)
+    end
 end
 
 function SelectBox:addItem(text, value, handler)

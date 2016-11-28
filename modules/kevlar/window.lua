@@ -16,7 +16,7 @@ function Window:ctor(content)
     self._content = Kevlar.Node.as(nil)
     self._vBranch = Kevlar.VerticalBranch.new()
 
-    self._header = Kevlar.Text.new("Window", Kevlar.TextAlign.Center)
+    self._header = Kevlar.Text.new( { text = "Window", align = Kevlar.TextAlign.Center })
     self._line = Kevlar.HLine.new("-")
 
     self._vBranch:addChild(self._header, "header")

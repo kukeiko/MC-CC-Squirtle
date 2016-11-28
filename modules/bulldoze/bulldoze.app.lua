@@ -28,39 +28,21 @@ function BulldozeApp:digLine()
     local foo
 
     for i = 1, 7 do
-        local label = Kevlar.Text.new("Direction: ")
+        local label = Kevlar.Text.new( { text = "Direction: " })
         local sb = Kevlar.SelectBox.new( {
+            align = Kevlar.TextAlign.Center,
+            sizing = Kevlar.Sizing.Stretched,
             items =
             {
-                Core.Direction.South,
-                { text = Core.Direction[Core.Direction.West], value = Core.Direction.West },
-                Core.Direction.North,
-                Core.Direction.East,
+                { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
+                { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
+                { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
+                { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
             }
         } )
 
         local hb = Kevlar.HorizontalBranch.new( { children = { label, sb }, sizing = Kevlar.Sizing.Dynamic })
         menu:addItem(hb, function() end)
-        --        log(sb)
-        --        local dir = Core.Direction.South
-        --        local label = Kevlar.Text.new("Direction: ")
-        --        local direction = Kevlar.Text.new(Core.Direction[dir])
-
-        --        direction:onEvent(Kevlar.Event.Type.Key, function(ev)
-        --            local key = ev:getValue()
-
-        --            if (key == keys.left) then
-        --                dir =(dir - 1) % 4
-        --            elseif (key == keys.right) then
-        --                dir =(dir + 1) % 4
-        --            end
-
-        --            direction:setText(Core.Direction[dir])
-        --        end )
-
-        --        local hb = Kevlar.HorizontalBranch.new( { children = { label, direction }, sizing = Kevlar.Sizing.Dynamic })
-        --        foo = hb
-        --        menu:addItem(hb, function() end)
     end
 
     self._window:setContent(menu)

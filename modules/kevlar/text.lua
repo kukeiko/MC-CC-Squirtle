@@ -1,28 +1,40 @@
 local Text = { }
 
+Text.Options = {
+    align = nil,
+    height = nil,
+    hidden = nil,
+    sizing = nil,
+    text = nil,
+    width = nil
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
-function Text.new(text, align, opts)
+function Text.new(opts)
     local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Text })
     setmetatable(Text, { __index = Kevlar.Node })
 
-    text = text or ""
-    align = align or Kevlar.TextAlign.Left
-
-    instance:ctor(text, align)
+    instance:ctor(opts)
 
     return instance
 end
 
-function Text:ctor(text, align)
-    self._text = text
-    self._align = align
+function Text:ctor(opts)
+    opts = self.asOptions(opts or { })
+
+    self._text = opts.text or ""
+    self._align = opts.align or Kevlar.TextAlign.Left
 end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
 function Text.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Text.Options"></returns>
+function Text.asOptions(instance) return instance end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>
@@ -56,9 +68,15 @@ end
 --- <returns type="number"></returns>
 function Text:computeWidth(h)
     if (h == nil) then
+        local words = self:getWords()
+
+        if (#words == 1) then
+            return #self:getText()
+        end
+
         local highest = 1
 
-        for i, word in ipairs(self:getWords()) do
+        for i, word in ipairs(words) do
             highest = math.max(highest, #word)
         end
 

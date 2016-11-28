@@ -32,9 +32,7 @@ function Node.as(instance) return instance end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Node.Options"></returns>
-function Node.asOptions(instance)
-    return instance
-end
+function Node.asOptions(instance) return instance end
 
 function Node:update() end
 

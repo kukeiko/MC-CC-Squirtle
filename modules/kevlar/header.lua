@@ -13,7 +13,7 @@ function Header.new(title, lineStr)
 end
 
 function Header:ctor(title, lineStr)
-    self._text = Kevlar.Text.new(title, Kevlar.TextAlign.Center)
+    self._text = Kevlar.Text.new( { text = title, align = Kevlar.TextAlign.Center })
     self._line = Kevlar.HLine.new(lineStr)
 end
 

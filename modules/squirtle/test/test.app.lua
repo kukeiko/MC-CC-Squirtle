@@ -23,7 +23,7 @@ function TestApp:run()
 
         if (i % 2 == 0) then
             itemvb = Kevlar.VerticalBranch.new()
-            local title = Kevlar.Text.new("Title " .. i, Kevlar.TextAlign.Center)
+            local title = Kevlar.Text.new( { text = "Title " .. i, align = Kevlar.TextAlign.Center })
             local tb = Kevlar.Textbox.new("moo", { width = 7 })
 
             itemvb:addChild(title)
