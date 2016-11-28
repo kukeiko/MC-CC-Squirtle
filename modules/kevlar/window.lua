@@ -13,7 +13,18 @@ function Window.new(content, w, h)
 end
 
 function Window:ctor(content)
-    self._content = Kevlar.Node.as(content)
+    self._content = Kevlar.Node.as(nil)
+    self._vBranch = Kevlar.VerticalBranch.new()
+
+    self._header = Kevlar.Text.new("Window", Kevlar.TextAlign.Center)
+    self._line = Kevlar.HLine.new("-")
+
+    self._vBranch:addChild(self._header, "header")
+    self._vBranch:addChild(self._line, "line")
+
+    if (content ~= nil) then
+        self:setContent(content)
+    end
 end
 
 --- <summary></summary>
@@ -27,14 +38,9 @@ function Window:base() return self end
 function Window:update()
     local buffer = self:base():getBuffer()
 
-    if (self._content == nil) then
-        buffer:clear()
-        return
-    end
-
-    self._content:setSize(buffer:getSize())
-    self._content:update()
-    self._content:draw(buffer)
+    self._vBranch:setSize(buffer:getSize())
+    self._vBranch:update()
+    self._vBranch:draw(buffer)
 end
 
 function Window:getContent()
@@ -43,6 +49,26 @@ end
 
 function Window:setContent(content)
     self._content = content
+    self._vBranch:removeChildByName("content")
+
+    if (content ~= nil) then
+        self._content:setSizing(Kevlar.Sizing.Stretched)
+        self._vBranch:addChild(content, "content")
+    end
+end
+
+function Window:setTitle(title)
+    self._header:setText(title)
+end
+
+function Window:showHeader()
+    self._header:show()
+    self._line:show()
+end
+
+function Window:hideHeader()
+    self._header:hide()
+    self._line:hide()
 end
 
 function Window:dispatchEvent(event)

@@ -23,6 +23,7 @@ function TurtleShell:run()
     end
 
     self._window:setContent(list)
+    self._window:hideHeader()
 end
 
 if (Squirtle == nil) then Squirtle = { } end
