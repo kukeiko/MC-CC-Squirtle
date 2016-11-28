@@ -14,6 +14,7 @@ function Node:ctor(w, h)
     self._buffer = Kevlar.CharBuffer.new(w or 1, h or 1)
     self._em = Core.EventManager.new()
     self._sizing = Kevlar.Sizing.Dynamic
+    self._isVisible = true
 end
 
 --- <summary></summary>
@@ -75,6 +76,18 @@ end
 
 function Node:setSizing(sizing)
     self._sizing = sizing
+end
+
+function Node:show()
+    self._isVisible = true
+end
+
+function Node:hide()
+    self._isVisible = false
+end
+
+function Node:isVisible()
+    return self._isVisible
 end
 
 function Node:dispatchEvent(event)

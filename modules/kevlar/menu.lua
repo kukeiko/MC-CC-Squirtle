@@ -39,6 +39,8 @@ function Menu:ctor(content)
                 item.handler()
             end
         end
+
+        self._vBranch:focusIndex(self._selectedIndex)
     end )
 end
 

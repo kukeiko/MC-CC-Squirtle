@@ -5,7 +5,7 @@ local Side = {
     Left = 3,
     Top = 4,
     Bottom = 5,
-    [0] = "South",
+    [0] = "Front",
     [1] = "Right",
     [2] = "Back",
     [3] = "Left",
@@ -26,7 +26,13 @@ local Direction = {
     North = 2,
     East = 3,
     Up = 4,
-    Down = 5
+    Down = 5,
+    [0] = "South",
+    [1] = "West",
+    [2] = "North",
+    [3] = "East",
+    [4] = "Up",
+    [5] = "Down"
 }
 
 Direction.Deltas = {

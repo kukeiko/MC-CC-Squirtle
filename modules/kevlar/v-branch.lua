@@ -27,7 +27,7 @@ function VerticalBranch.super() return Kevlar.Branch end
 function VerticalBranch:base() return self end
 
 function VerticalBranch:update()
-    local children = self:getChildren()
+    local children = self:getVisibleChildren()
     local child = Kevlar.Node.as(nil)
     local buffer = self:base():base():getBuffer()
     local wMax, hMax = buffer:getSize()
@@ -102,7 +102,7 @@ function VerticalBranch:computeHeight(w)
     local child = Kevlar.Node.as(nil)
     local h = 0
 
-    for i, child in ipairs(self:getChildren()) do
+    for i, child in ipairs(self:getVisibleChildren()) do
         if (child:getSizing() == Kevlar.Sizing.Fixed) then
             h = h + child:getHeight()
         else
@@ -117,7 +117,7 @@ function VerticalBranch:computeWidth(h)
     local child = Kevlar.Node.as(nil)
     local highest = 0
 
-    for i, child in ipairs(self:getChildren()) do
+    for i, child in ipairs(self:getVisibleChildren()) do
         local w
 
         if (child:getSizing() == Kevlar.Sizing.Fixed) then
@@ -150,6 +150,10 @@ end
 
 function VerticalBranch:getAlign()
     return self.super().getAlign(self)
+end
+
+function VerticalBranch:focusIndex(index)
+    self.super().focusIndex(self, index)
 end
 
 if (Kevlar == nil) then Kevlar = { } end

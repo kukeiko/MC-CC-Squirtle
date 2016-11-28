@@ -77,6 +77,18 @@ function ProxyNode:setSizing(sizing)
     self._proxied:setSizing(sizing)
 end
 
+function ProxyNode:show()
+    self._proxied:show()
+end
+
+function ProxyNode:hide()
+    self._proxied:hide()
+end
+
+function ProxyNode:isVisible()
+    return self._proxied:isVisible()
+
+end
 function ProxyNode:dispatchEvent(event)
     self._proxied:dispatchEvent(event)
 end

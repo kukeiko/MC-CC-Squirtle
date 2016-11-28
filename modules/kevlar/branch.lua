@@ -16,6 +16,7 @@ function Branch:ctor()
     self._children = { }
     self._childMap = { }
     self._align = Kevlar.ContentAlign.Start
+    self._focusIndex = nil
 end
 
 --- <summary></summary>
@@ -39,14 +40,45 @@ function Branch:getChildren()
     return self._children
 end
 
+function Branch:getVisibleChildren()
+    local visible = { }
+    local child = Kevlar.Node.as(nil)
+
+    for i, child in ipairs(self._children) do
+        if (child:isVisible()) then
+            table.insert(visible, child)
+        end
+    end
+
+    return visible
+end
+
 function Branch:getChildByName(name)
     return self._childMap[name]
+end
+
+function Branch:removeChildByName(name)
+    local child = self._childMap[name]
+    if (child == nil) then return end
+
+    local index = nil
+
+    for i, v in ipairs(self._children) do
+        if (v == child) then
+            index = i
+            break
+        end
+    end
+
+    if (index) then
+        table.remove(self._children, index)
+        self._childMap[name] = nil
+    end
 end
 
 function Branch:removeChildren()
     self._children = { }
     self._childMap = { }
-    self._nextChildId = 1
 end
 
 function Branch:setAlign(align)
@@ -61,17 +93,27 @@ function Branch:dispatchEvent(event)
     child = Kevlar.Node.as(nil)
     event = Kevlar.Event.as(event)
 
-    for k, child in ipairs(self:getChildren()) do
-        child:dispatchEvent(event)
+    local children = self:getVisibleChildren()
 
-        if (event:isConsumed()) then
-            break
+    if (self._focusIndex and self._focusIndex > 0 and self._focusIndex <= #children) then
+        self._children[self._focusIndex]:dispatchEvent(event)
+    else
+        for k, child in ipairs(children) do
+            child:dispatchEvent(event)
+
+            if (event:isConsumed()) then
+                break
+            end
         end
     end
 
     if (not event:isConsumed()) then
         Kevlar.Node.dispatchEvent(self, event)
     end
+end
+
+function Branch:focusIndex(index)
+    self._focusIndex = index
 end
 
 if (Kevlar == nil) then Kevlar = { } end

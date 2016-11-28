@@ -46,8 +46,10 @@ function HorizontalBranch:update()
         end
     end
 
+    local visible = self:getVisibleChildren()
+
     for i, size in ipairs(sizes) do
-        child = self:getChildren()[i]
+        child = visible[i]
         child:setSize(size.w, size.h)
         child:update()
         child:draw(buffer:base():sub(xOffset + 1, 1, size.w, size.h))
@@ -70,6 +72,28 @@ function HorizontalBranch:computeHeight(w)
     return highest
 end
 
+-- todo: implement computeWidth()
+function HorizontalBranch:computeWidth(h)
+    local child = Kevlar.Node.as(nil)
+    local total = 0
+
+    for i, child in ipairs(self:getVisibleChildren()) do
+        local minWidth
+        local sizingMode = child:getSizing()
+
+        if (sizingMode == Kevlar.Sizing.Fixed) then
+            minWidth = child:getWidth()
+        else
+            minWidth = child:computeWidth(h)
+        end
+
+        total = total + minWidth
+    end
+
+    return total
+end
+
+-- todo: rename and make "private"
 function HorizontalBranch:computeChildSizes(wMax)
     local child = Kevlar.Node.as(nil)
     local wUsed = 0
@@ -78,7 +102,7 @@ function HorizontalBranch:computeChildSizes(wMax)
     local dynamic = { }
     local minWidths = { }
 
-    for i, child in ipairs(self:getChildren()) do
+    for i, child in ipairs(self:getVisibleChildren()) do
         local minWidth
         local sizingMode = child:getSizing()
 
@@ -174,6 +198,10 @@ end
 
 function HorizontalBranch:getAlign()
     return self.super().getAlign(self)
+end
+
+function HorizontalBranch:focusIndex(index)
+    self.super().focusIndex(self, index)
 end
 
 if (Kevlar == nil) then Kevlar = { } end
