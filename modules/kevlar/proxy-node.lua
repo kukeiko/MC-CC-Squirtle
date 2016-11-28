@@ -18,6 +18,10 @@ end
 --- <returns type="Kevlar.ProxyNode"></returns>
 function ProxyNode.as(instance) return instance end
 
+function ProxyNode:getProxied()
+    return self._proxied
+end
+
 function ProxyNode:update()
     self._proxied:update()
 end

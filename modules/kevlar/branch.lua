@@ -30,7 +30,7 @@ function Branch:ctor(opts)
     self._focusIndex = nil
 
     if (type(opts.children) == "table") then
-        for i, v in pairs(opts.children) do
+        for i, v in ipairs(opts.children) do
             if (v.node and v.name and not v.update) then
                 self:addChild(v.node, v.name)
             else

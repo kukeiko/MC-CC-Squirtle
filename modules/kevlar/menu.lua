@@ -73,6 +73,8 @@ function Menu:update()
 end
 
 function Menu:addItem(textOrNode, handler)
+    handler = handler or function() end
+
     local node = Kevlar.Node.as(textOrNode)
 
     if (type(textOrNode) == "string") then

@@ -25,6 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="modules\bulldoze\bulldoze.app.lua" />
     <Content Include="modules\squirtle\test\test.app.lua" />
     <Content Include="modules\squirtle\test\test.task.lua" />
   </ItemGroup>
@@ -33,12 +34,14 @@
     <Folder Include="modules\core\" />
     <Folder Include="modules\kevlar\" />
     <Folder Include="modules\kevlar\sync\" />
+    <Folder Include="modules\bulldoze\" />
     <Folder Include="modules\scout\" />
     <Folder Include="modules\squirtle\" />
     <Folder Include="modules\squirtle\test\" />
     <Folder Include="modules\unity\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="modules\bulldoze\dig-line.task.lua" />
     <Compile Include="modules\core\disk.lua" />
     <Compile Include="modules\core\event-manager.lua" />
     <Compile Include="modules\core\extensions.lua" />
@@ -61,6 +64,7 @@
     <Compile Include="modules\kevlar\paged-list.lua" />
     <Compile Include="modules\kevlar\proxy-node.lua" />
     <Compile Include="modules\kevlar\searchable-list.lua" />
+    <Compile Include="modules\kevlar\select-box.lua" />
     <Compile Include="modules\kevlar\sync\input.lua" />
     <Compile Include="modules\kevlar\sync\menu.lua" />
     <Compile Include="modules\kevlar\sync\select.lua" />
