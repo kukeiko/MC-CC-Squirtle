@@ -1,27 +1,54 @@
 local Branch = { }
 
+Branch.Options = {
+    align = nil,
+    children = nil,
+    height = nil,
+    hidden = nil,
+    sizing = nil,
+    width = nil
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Branch"></returns>
-function Branch.new(w, h)
-    local instance = Kevlar.Node.new(w, h)
+function Branch.new(opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Branch })
     setmetatable(Branch, { __index = Kevlar.Node })
-    instance:ctor()
+    instance:ctor(opts)
 
     return instance
 end
 
-function Branch:ctor()
+function Branch:ctor(opts)
+    opts = self.asOptions(opts or { })
+
     self._nextChildId = 1
     self._children = { }
     self._childMap = { }
-    self._align = Kevlar.ContentAlign.Start
+    self._align = opts.align or Kevlar.ContentAlign.Start
     self._focusIndex = nil
+
+    if (type(opts.children) == "table") then
+        for i, v in pairs(opts.children) do
+            if (v.node and v.name and not v.update) then
+                self:addChild(v.node, v.name)
+            else
+                self:addChild(v)
+            end
+        end
+    end
 end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Branch"></returns>
 function Branch.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Branch.Options"></returns>
+function Branch.asOptions(instance)
+    return instance
+end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>

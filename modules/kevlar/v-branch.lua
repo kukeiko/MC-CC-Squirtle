@@ -2,8 +2,8 @@ local VerticalBranch = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.VerticalBranch"></returns>
-function VerticalBranch.new(w, h)
-    local instance = Kevlar.Branch.new(w, h)
+function VerticalBranch.new(opts)
+    local instance = Kevlar.Branch.new(opts)
     setmetatable(instance, { __index = VerticalBranch })
     setmetatable(VerticalBranch, { __index = Kevlar.Branch })
     instance:ctor()

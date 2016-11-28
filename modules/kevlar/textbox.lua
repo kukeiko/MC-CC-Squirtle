@@ -2,8 +2,8 @@ local Textbox = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Textbox"></returns>
-function Textbox.new(text, w)
-    local instance = Kevlar.Node.new(w, 1)
+function Textbox.new(text, opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Textbox })
     setmetatable(Textbox, { __index = Kevlar.Node })
 

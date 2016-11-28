@@ -4,8 +4,8 @@ local HLine = { }
 --- A line drawn horicontally, repeating the given string
 --- </summary>
 --- <returns type="Kevlar.HLine"></returns>
-function HLine.new(str)
-    local instance = Kevlar.Node.new()
+function HLine.new(str, opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = HLine })
     setmetatable(HLine, { __index = Kevlar.Node })
 

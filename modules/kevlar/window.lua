@@ -2,8 +2,8 @@ local Window = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Window"></returns>
-function Window.new(content, w, h)
-    local instance = Kevlar.Node.new(w, h)
+function Window.new(content, opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Window })
     setmetatable(Window, { __index = Kevlar.Node })
 

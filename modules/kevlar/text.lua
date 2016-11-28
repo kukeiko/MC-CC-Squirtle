@@ -2,8 +2,8 @@ local Text = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.Text"></returns>
-function Text.new(text, align, w, h)
-    local instance = Kevlar.Node.new(w, h)
+function Text.new(text, align, opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Text })
     setmetatable(Text, { __index = Kevlar.Node })
 
@@ -56,12 +56,10 @@ end
 --- <returns type="number"></returns>
 function Text:computeWidth(h)
     if (h == nil) then
-        local highest = 0
+        local highest = 1
 
         for i, word in ipairs(self:getWords()) do
-            if (#word > highest) then
-                highest = #word
-            end
+            highest = math.max(highest, #word)
         end
 
         return highest

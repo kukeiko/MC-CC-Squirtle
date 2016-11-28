@@ -2,8 +2,8 @@ local HorizontalBranch = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.HorizontalBranch"></returns>
-function HorizontalBranch.new(w, h)
-    local instance = Kevlar.Branch.new(w, h)
+function HorizontalBranch.new(opts)
+    local instance = Kevlar.Branch.new(opts)
     setmetatable(instance, { __index = HorizontalBranch })
     setmetatable(HorizontalBranch, { __index = Kevlar.Branch })
     instance:ctor()
@@ -60,19 +60,31 @@ end
 
 --- <returns type="number"></returns>
 function HorizontalBranch:computeHeight(w)
-    local sizes = self:computeChildSizes(w)
-    local highest = 0
+    if (w == nil) then
+        local child = Kevlar.Node.as(nil)
+        local highest = 1
 
-    for i, size in ipairs(sizes) do
-        if (size.h > highest) then
-            highest = size.h
+        for i, child in ipairs(self:getVisibleChildren()) do
+            if (child:getSizing() == Kevlar.Sizing.Fixed) then
+                highest = math.max(highest, child:getHeight())
+            else
+                highest = math.max(highest, child:computeHeight())
+            end
         end
-    end
 
-    return highest
+        return highest
+    else
+        local sizes = self:computeChildSizes(w)
+        local highest = 1
+
+        for i, size in ipairs(sizes) do
+            highest = math.max(highest, size.h)
+        end
+
+        return highest
+    end
 end
 
--- todo: implement computeWidth()
 function HorizontalBranch:computeWidth(h)
     local child = Kevlar.Node.as(nil)
     local total = 0
@@ -90,7 +102,7 @@ function HorizontalBranch:computeWidth(h)
         total = total + minWidth
     end
 
-    return total
+    return math.max(1, total)
 end
 
 -- todo: rename and make "private"
@@ -150,7 +162,7 @@ function HorizontalBranch:computeChildSizes(wMax)
                 local possibleWidth = child:computeWidth(1)
 
                 if (possibleWidth > minWidths[i]) then
-                    local allocated = math.min(possibleWidth, remaining)
+                    local allocated = math.min(possibleWidth, remaining + minWidths[i])
                     minWidths[i] = allocated
                     remaining = remaining - allocated
 
@@ -186,6 +198,10 @@ end
 
 function HorizontalBranch:getChildren()
     return self.super().getChildren(self)
+end
+
+function HorizontalBranch:getVisibleChildren()
+    return self.super().getVisibleChildren(self)
 end
 
 function HorizontalBranch:removeChildren()

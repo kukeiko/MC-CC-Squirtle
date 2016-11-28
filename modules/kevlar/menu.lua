@@ -79,13 +79,15 @@ function Menu:addItem(textOrNode, handler)
         node = Kevlar.Text.new(textOrNode)
     end
 
-    local indicator = Kevlar.Text.new("", Kevlar.TextAlign.Left, 1, 1)
-    indicator:setSizing(Kevlar.Sizing.Fixed)
-
-    local container = Kevlar.HorizontalBranch.new()
-    container:addChild(indicator, "indicator")
-    container:addChild(node, "item")
-    container:setAlign(Kevlar.ContentAlign.Center)
+    local indicator = Kevlar.Text.new("", Kevlar.TextAlign.Left, { width = 1, height = 1, sizing = Kevlar.Sizing.Fixed })
+    local container = Kevlar.HorizontalBranch.new( {
+        align = Kevlar.ContentAlign.Center,
+        children =
+        {
+            { name = "indicator", node = indicator },
+            { name = "item", node = node }
+        }
+    } )
 
     table.insert(self._items, { node = container, handler = handler })
     self._vBranch:addChild(container)

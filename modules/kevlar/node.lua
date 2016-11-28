@@ -1,25 +1,40 @@
 local Node = { }
 
+Node.Options = {
+    height = nil,
+    hidden = nil,
+    sizing = nil,
+    width = nil
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>
-function Node.new(w, h)
+function Node.new(opts)
     local instance = { }
     setmetatable(instance, { __index = Node })
-    instance:ctor(w, h)
+    instance:ctor(opts)
 
     return instance
 end
 
-function Node:ctor(w, h)
-    self._buffer = Kevlar.CharBuffer.new(w or 1, h or 1)
+function Node:ctor(opts)
+    opts = self.asOptions(opts or { })
+
+    self._buffer = Kevlar.CharBuffer.new(opts.width or 1, opts.height or 1)
     self._em = Core.EventManager.new()
-    self._sizing = Kevlar.Sizing.Dynamic
-    self._isVisible = true
+    self._sizing = opts.sizing or Kevlar.Sizing.Dynamic
+    self._isVisible = not opts.hidden
 end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>
 function Node.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Node.Options"></returns>
+function Node.asOptions(instance)
+    return instance
+end
 
 function Node:update() end
 

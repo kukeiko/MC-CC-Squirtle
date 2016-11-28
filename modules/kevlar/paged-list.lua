@@ -2,8 +2,8 @@ local PagedList = { }
 
 --- <summary></summary>
 --- <returns type="Kevlar.PagedList"></returns>
-function PagedList.new()
-    local instance = Kevlar.Node.new()
+function PagedList.new(opts)
+    local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = PagedList })
     setmetatable(PagedList, { __index = Kevlar.Node })
     instance:ctor()

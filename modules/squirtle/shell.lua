@@ -69,7 +69,8 @@ end
 function Shell:openWindow(charSpace)
     charSpace = Kevlar.CharSpace.as(charSpace)
 
-    local win = Kevlar.Window.new(nil, charSpace:getSize())
+    local w, h = charSpace:getSize()
+    local win = Kevlar.Window.new(nil, { width = w, height = h })
 
     table.insert(self._windows, win)
     table.insert(self._charSpaces, charSpace)
