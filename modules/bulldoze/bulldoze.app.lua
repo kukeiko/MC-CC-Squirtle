@@ -27,23 +27,33 @@ function BulldozeApp:digLine()
     local menu = Kevlar.Menu.new()
     local foo
 
-    for i = 1, 7 do
-        local label = Kevlar.Text.new( { text = "Direction: " })
-        local sb = Kevlar.SelectBox.new( {
-            align = Kevlar.TextAlign.Center,
-            sizing = Kevlar.Sizing.Stretched,
-            items =
-            {
-                { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
-                { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
-                { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
-                { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
-            }
-        } )
+    local length = Kevlar.HorizontalBranch.new( {
+        children =
+        {
+            Kevlar.Text.new( { text = "Length: " }),
+            Kevlar.NumberBox.new()
+        }
+    } )
 
-        local hb = Kevlar.HorizontalBranch.new( { children = { label, sb }, sizing = Kevlar.Sizing.Dynamic })
-        menu:addItem(hb, function() end)
-    end
+    menu:addItem(length)
+
+    --    for i = 1, 7 do
+    --        local label = Kevlar.Text.new( { text = "Direction: " })
+    --        local sb = Kevlar.SelectBox.new( {
+    --            align = Kevlar.TextAlign.Center,
+    --            sizing = Kevlar.Sizing.Stretched,
+    --            items =
+    --            {
+    --                { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
+    --                { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
+    --                { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
+    --                { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
+    --            }
+    --        } )
+
+    --        local hb = Kevlar.HorizontalBranch.new( { children = { label, sb }, sizing = Kevlar.Sizing.Dynamic })
+    --        menu:addItem(hb, function() end)
+    --    end
 
     self._window:setContent(menu)
 end

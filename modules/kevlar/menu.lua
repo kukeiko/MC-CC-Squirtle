@@ -63,9 +63,9 @@ function Menu:update()
         indicator = item.node:getChildByName("indicator")
 
         if (i == self._selectedIndex) then
-            indicator:setText(">")
+            indicator:setText("> ")
         else
-            indicator:setText("")
+            indicator:setText(" ")
         end
     end
 

@@ -83,10 +83,6 @@ function SelectBox:base() return self end
 --- <returns type="Kevlar.ProxyNode"></returns>
 function SelectBox.super() return Kevlar.ProxyNode end
 
-function SelectBox:update()
-    SelectBox.super().update(self)
-end
-
 function SelectBox:computeWidth(h)
     if (self:base():getSizing() == Kevlar.Sizing.Stretched) then
         local highest = 1

@@ -61,6 +61,7 @@
     <Compile Include="modules\kevlar\char-space.lua" />
     <Compile Include="modules\kevlar\menu.lua" />
     <Compile Include="modules\kevlar\node.lua" />
+    <Compile Include="modules\kevlar\number-box.lua" />
     <Compile Include="modules\kevlar\paged-list.lua" />
     <Compile Include="modules\kevlar\proxy-node.lua" />
     <Compile Include="modules\kevlar\searchable-list.lua" />
