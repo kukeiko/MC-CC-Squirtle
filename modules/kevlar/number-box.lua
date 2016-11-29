@@ -129,5 +129,9 @@ function NumberBox:computeWidth(h)
     end
 end
 
+function NumberBox:getValue()
+    return self._value
+end
+
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.NumberBox = NumberBox

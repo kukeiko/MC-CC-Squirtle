@@ -51,6 +51,7 @@
     <Compile Include="modules\core\pathing.lua" />
     <Compile Include="modules\core\thread.lua" />
     <Compile Include="modules\core\utils.lua" />
+    <Compile Include="modules\kevlar\bool-box.lua" />
     <Compile Include="modules\kevlar\branch.lua" />
     <Compile Include="modules\kevlar\char-buffer.lua" />
     <Compile Include="modules\kevlar\event.lua" />

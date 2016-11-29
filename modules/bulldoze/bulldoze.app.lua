@@ -53,8 +53,17 @@ function BulldozeApp:digLine()
         }
     } )
 
-    menu:addItem(length)
+    local comeBack = Kevlar.HorizontalBranch.new( {
+        children =
+        {
+            Kevlar.Text.new( { text = "Return: " }),
+            Kevlar.BoolBox.new( { format = Kevlar.BoolBox.Format.TrueFalse, change = function(v) log(tostring(v)) end })
+        }
+    } )
+
     menu:addItem(direction)
+    menu:addItem(length)
+    menu:addItem(comeBack)
 
     self._window:setContent(menu)
 end

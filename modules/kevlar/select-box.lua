@@ -1,6 +1,7 @@
 local SelectBox = { }
 
 SelectBox.Options = {
+    change = nil,
     height = nil,
     hidden = nil,
     items = nil,
@@ -22,12 +23,16 @@ function SelectBox.new(opts)
 end
 
 function SelectBox:ctor(opts)
+    opts = SelectBox.asOptions(opts or { })
+
     self._items = { }
     self._label = Kevlar.Text.as(self:base():getProxied())
     self._selectedIndex = 1
+    self._change = opts.change or function() end
 
     self:base():onEvent(Kevlar.Event.Type.Key, function(ev)
         local key = ev:getValue()
+        local currentIndex = self._selectedIndex
 
         if (key == keys.left) then
             self._selectedIndex = self._selectedIndex - 1
@@ -51,6 +56,10 @@ function SelectBox:ctor(opts)
 
         if (#self._items > 0) then
             self._label:setText(self._items[self._selectedIndex].text)
+        end
+
+        if (self._selectedIndex ~= currentIndex) then
+            self._change(self:getValue())
         end
     end )
 
@@ -98,7 +107,7 @@ function SelectBox:computeWidth(h)
 end
 
 function SelectBox:getValue()
-    return(self._items[self._selectedIndex] or { }).value or nil
+    return(self._items[self._selectedIndex] or { }).value
 end
 
 function SelectBox:addItem(text, value, handler)
