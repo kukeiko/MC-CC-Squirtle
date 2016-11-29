@@ -83,7 +83,9 @@ function NumberBox:ctor(opts)
         local number = tonumber(char)
 
         if (char == "-") then
-            self._prefix = "-"
+            if ((self._min or -1) < 0) then
+                self._prefix = "-"
+            end
         elseif (char == "+") then
             self._prefix = " "
         elseif (number) then

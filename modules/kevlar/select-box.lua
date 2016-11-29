@@ -97,6 +97,10 @@ function SelectBox:computeWidth(h)
     end
 end
 
+function SelectBox:getValue()
+    return(self._items[self._selectedIndex] or { }).value or nil
+end
+
 function SelectBox:addItem(text, value, handler)
     table.insert(self._items, { text = text, value = value, handler = handler })
 

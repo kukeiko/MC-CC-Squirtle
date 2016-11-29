@@ -31,29 +31,30 @@ function BulldozeApp:digLine()
         children =
         {
             Kevlar.Text.new( { text = "Length: " }),
-            Kevlar.NumberBox.new()
+            Kevlar.NumberBox.new( { min = 1, max = 100 })
+        }
+    } )
+
+    local direction = Kevlar.HorizontalBranch.new( {
+        children =
+        {
+            Kevlar.Text.new( { text = "Direction: " }),
+            Kevlar.SelectBox.new( {
+                align = Kevlar.TextAlign.Center,
+                sizing = Kevlar.Sizing.Stretched,
+                items =
+                {
+                    { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
+                    { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
+                    { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
+                    { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
+                }
+            } )
         }
     } )
 
     menu:addItem(length)
-
-    --    for i = 1, 7 do
-    --        local label = Kevlar.Text.new( { text = "Direction: " })
-    --        local sb = Kevlar.SelectBox.new( {
-    --            align = Kevlar.TextAlign.Center,
-    --            sizing = Kevlar.Sizing.Stretched,
-    --            items =
-    --            {
-    --                { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
-    --                { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
-    --                { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
-    --                { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
-    --            }
-    --        } )
-
-    --        local hb = Kevlar.HorizontalBranch.new( { children = { label, sb }, sizing = Kevlar.Sizing.Dynamic })
-    --        menu:addItem(hb, function() end)
-    --    end
+    menu:addItem(direction)
 
     self._window:setContent(menu)
 end

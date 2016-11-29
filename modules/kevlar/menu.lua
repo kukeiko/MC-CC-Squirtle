@@ -65,7 +65,7 @@ function Menu:update()
         if (i == self._selectedIndex) then
             indicator:setText("> ")
         else
-            indicator:setText(" ")
+            indicator:setText("  ")
         end
     end
 
@@ -81,7 +81,7 @@ function Menu:addItem(textOrNode, handler)
         node = Kevlar.Text.new( { text = textOrNode })
     end
 
-    local indicator = Kevlar.Text.new( { text = "", align = Kevlar.TextAlign.Left, { width = 1, height = 1, sizing = Kevlar.Sizing.Fixed } })
+    local indicator = Kevlar.Text.new( { text = "  ", align = Kevlar.TextAlign.Left, width = 2, height = 1, sizing = Kevlar.Sizing.Fixed })
     local container = Kevlar.HorizontalBranch.new( {
         align = Kevlar.ContentAlign.Center,
         children =
