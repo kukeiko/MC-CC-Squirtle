@@ -40,17 +40,6 @@ function BulldozeApp:digLine()
         {
             Kevlar.Text.new( { text = "Direction: " }),
             Kevlar.DirectionBox.new( { format = Kevlar.DirectionBox.Format.All })
-            --            Kevlar.SelectBox.new( {
-            --                align = Kevlar.TextAlign.Center,
-            --                sizing = Kevlar.Sizing.Stretched,
-            --                items =
-            --                {
-            --                    { text = Core.Direction[Core.Direction.South], value = Core.Direction.South, handler = function() log("south!") end },
-            --                    { text = Core.Direction[Core.Direction.West], value = Core.Direction.West, handler = function() log("west!") end },
-            --                    { text = Core.Direction[Core.Direction.North], value = Core.Direction.North, handler = function() log("north!") end },
-            --                    { text = Core.Direction[Core.Direction.East], value = Core.Direction.East, handler = function() log("east!") end },
-            --                }
-            --            } )
         }
     } )
 
@@ -62,9 +51,18 @@ function BulldozeApp:digLine()
         }
     } )
 
+    local name = Kevlar.HorizontalBranch.new( {
+        children =
+        {
+            Kevlar.Text.new( { text = "Name: " }),
+            Kevlar.Textbox.new()
+        }
+    } )
+
     menu:addItem(direction)
     menu:addItem(length)
     menu:addItem(comeBack)
+    menu:addItem(name)
 
     self._window:setContent(menu)
 end

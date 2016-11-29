@@ -1,21 +1,28 @@
 local Textbox = { }
 
+Textbox.Options = {
+    height = nil,
+    hidden = nil,
+    sizing = nil,
+    value = nil,
+    width = nil
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Textbox"></returns>
-function Textbox.new(text, opts)
+function Textbox.new(opts)
     local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Textbox })
     setmetatable(Textbox, { __index = Kevlar.Node })
 
-    text = text or ""
-
-    instance:ctor(text, align)
+    instance:ctor(opts)
 
     return instance
 end
 
-function Textbox:ctor(text)
-    self._text = text
+function Textbox:ctor(opts)
+    opts = self.asOptions(opts or { })
+    self._text = opts.value or ""
 
     self:base():onEvent(Kevlar.Event.Type.Char, function(ev)
         self._text = self._text .. ev:getValue()
@@ -33,6 +40,10 @@ end
 --- <summary></summary>
 --- <returns type="Kevlar.Textbox"></returns>
 function Textbox.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Textbox.Options"></returns>
+function Textbox.asOptions(instance) return instance end
 
 --- <summary></summary>
 --- <returns type="Kevlar.Node"></returns>
@@ -69,12 +80,20 @@ end
 
 --- <returns type="number"></returns>
 function Textbox:computeWidth(h)
-    return 1
+    return #self._text
 end
 
 --- <returns type="number"></returns>
 function Textbox:computeHeight(w)
     return 1
+end
+
+function Textbox:getValue()
+    return self._text
+end
+
+function Textbox:setValue(v)
+    self._text = v or ""
 end
 
 --- <returns type="Kevlar.Sizing"></returns>

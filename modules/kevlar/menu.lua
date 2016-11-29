@@ -85,7 +85,6 @@ function Menu:addItem(textOrNode, handler)
 
     local indicator = Kevlar.Text.new( { text = "  ", align = Kevlar.TextAlign.Left, width = 2, height = 1, sizing = Kevlar.Sizing.Fixed })
     local container = Kevlar.HorizontalBranch.new( {
-        align = Kevlar.ContentAlign.Center,
         children =
         {
             { name = "indicator", node = indicator },
