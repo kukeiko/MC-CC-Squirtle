@@ -42,6 +42,8 @@ function Menu:ctor(content)
 
         self._vBranch:focusIndex(self._selectedIndex)
     end )
+
+    self._vBranch:focusIndex(self._selectedIndex)
 end
 
 --- <summary></summary>

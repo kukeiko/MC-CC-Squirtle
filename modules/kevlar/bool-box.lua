@@ -12,6 +12,7 @@ BoolBox.Options = {
     height = nil,
     hidden = nil,
     sizing = nil,
+    value = nil,
     width = nil
 }
 
@@ -44,6 +45,8 @@ function BoolBox:ctor(opts)
         self._selectBox:addItem("Yes", true)
         self._selectBox:addItem("No", false)
     end
+
+    self._selectBox:setValue(opts.value or false)
 end
 
 --- <summary></summary>

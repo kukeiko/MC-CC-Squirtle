@@ -110,12 +110,18 @@ function SelectBox:getValue()
     return(self._items[self._selectedIndex] or { }).value
 end
 
+function SelectBox:setValue(v)
+    for i, item in ipairs(self._items) do
+        if (item.value == v) then
+            self._selectedIndex = i
+            self._label:setText(item.text)
+            break
+        end
+    end
+end
+
 function SelectBox:addItem(text, value, handler)
     table.insert(self._items, { text = text, value = value, handler = handler })
-
-    if (#self._items == 1) then
-        self._label:setText(text)
-    end
 end
 
 function SelectBox:getItems()
