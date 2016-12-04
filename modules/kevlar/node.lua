@@ -1,3 +1,5 @@
+--- Base class for all elements, controls and branches.
+-- @module Kevlar.Node
 local Node = { }
 
 Node.Options = {

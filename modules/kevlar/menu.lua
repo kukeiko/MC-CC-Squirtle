@@ -1,42 +1,64 @@
 local Menu = { }
 
+Menu.Options = {
+    height = nil,
+    hidden = nil,
+    wrapsAround = false,
+    sizing = nil,
+    width = nil
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Menu"></returns>
-function Menu.new()
-    local content = Kevlar.VerticalBranch.new()
+function Menu.new(opts)
+    local content = Kevlar.VerticalBranch.new(opts)
     local instance = Kevlar.ProxyNode.new(content)
     setmetatable(instance, { __index = Menu })
     setmetatable(Menu, { __index = Kevlar.ProxyNode })
 
-    instance:ctor(content)
+    instance:ctor(content, opts)
 
     return instance
 end
 
-function Menu:ctor(content)
+function Menu:ctor(content, opts)
+    opts = self.asOptions(opts or { })
+
     self._items = { }
     self._vBranch = Kevlar.VerticalBranch.as(content)
     self._selectedIndex = 1
+    self._wrapsAround = opts.wrapsAround or false
 
     self:base():onEvent(Kevlar.Event.Type.Key, function(ev)
         local key = ev:getValue()
 
         if (key == keys.up) then
-            self._selectedIndex = self._selectedIndex - 1
+            if (self._selectedIndex > 1 or(self._wrapsAround and self._selectedIndex == 1)) then
+                self._selectedIndex = self._selectedIndex - 1
 
-            if (self._selectedIndex < 1) then
-                self._selectedIndex = #self._items
+                if (self._selectedIndex < 1) then
+                    self._selectedIndex = #self._items
+                end
+
+                ev:consume()
             end
         elseif (key == keys.down) then
-            self._selectedIndex = self._selectedIndex + 1
+            if (self._selectedIndex < #self._items or(self._wrapsAround and self._selectedIndex == #self._items)) then
+                self._selectedIndex = self._selectedIndex + 1
 
-            if (self._selectedIndex > #self._items) then
-                self._selectedIndex = 1
+                if (self._selectedIndex > #self._items) then
+                    self._selectedIndex = 1
+                end
+
+                ev:consume()
             end
         elseif (key == keys.enter) then
             local item = self._items[self._selectedIndex]
+
             if (item and item.handler) then
                 item.handler()
+
+                ev:consume()
             end
         end
 
@@ -49,6 +71,10 @@ end
 --- <summary></summary>
 --- <returns type="Kevlar.Menu"></returns>
 function Menu.as(instance) return instance end
+
+--- <summary></summary>
+--- <returns type="Kevlar.Menu.Options"></returns>
+function Menu.asOptions(instance) return instance end
 
 --- <summary></summary>
 --- <returns type="Kevlar.ProxyNode"></returns>

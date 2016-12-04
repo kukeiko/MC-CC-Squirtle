@@ -1,3 +1,5 @@
+--- Element which can contain other nodes as children.
+-- @module Kevlar.Branch
 local Branch = { }
 
 Branch.Options = {

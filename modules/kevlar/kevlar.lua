@@ -1,4 +1,6 @@
-Kevlar = Kevlar or { }
+--- UI API
+-- @module Kevlar
+local Kevlar = Kevlar or { }
 
 Kevlar.escape = 50
 

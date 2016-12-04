@@ -15,24 +15,16 @@ function TestApp:ctor(kernel, win)
 end
 
 function TestApp:run()
-    local menu = Kevlar.Menu.new()
-    local itemvb = Kevlar.VerticalBranch.as(nil)
+    local menu = Kevlar.Menu.new( { wrapsAround = true })
+    local subMenu = Kevlar.Menu.as(nil)
 
     for i = 1, 3 do
-        local item = "item " .. i
+        subMenu = Kevlar.Menu.new()
+        menu:addItem(subMenu)
 
-        if (i % 2 == 0) then
-            itemvb = Kevlar.VerticalBranch.new()
-            local title = Kevlar.Text.new( { text = "Title " .. i, align = Kevlar.TextAlign.Center })
-            local tb = Kevlar.Textbox.new( { value = "moo", width = 7 })
-
-            itemvb:addChild(title)
-            itemvb:addChild(tb)
-
-            item = itemvb
+        for e = 1, i do
+            subMenu:addItem("item " .. i .. "." .. e, function() log("invoked item " .. i .. "." .. e) end)
         end
-
-        menu:addItem(item, function() log("item " .. i .. " invoked") end)
     end
 
     self._window:setContent(menu)
