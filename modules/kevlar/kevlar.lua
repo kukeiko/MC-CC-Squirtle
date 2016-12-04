@@ -1,6 +1,6 @@
 --- UI API
 -- @module Kevlar
-local Kevlar = Kevlar or { }
+Kevlar = Kevlar or { }
 
 Kevlar.escape = 50
 
