@@ -18,7 +18,7 @@ function TurtleShell:run()
     local list = Kevlar.SearchableList.new()
     local apps = self._kernel:getAvailableApps()
 
-    for name, app in pairs(apps) do
+    for name, app in spairs(apps) do
         list:addItem(name, function() self._kernel:runApp(app) end)
     end
 
