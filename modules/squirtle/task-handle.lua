@@ -3,15 +3,16 @@ local TaskHandle = { }
 --- <summary>
 --- </summary>
 --- <returns type="Squirtle.TaskHandle"></returns>
-function TaskHandle.new(task)
+function TaskHandle.new(name, task)
     local instance = { }
     setmetatable(instance, { __index = TaskHandle })
-    instance:ctor(task)
+    instance:ctor(name, task)
 
     return instance
 end
 
-function TaskHandle:ctor(task)
+function TaskHandle:ctor(name, task)
+    self._name = name
     self._task = Squirtle.Task.as(task)
 end
 

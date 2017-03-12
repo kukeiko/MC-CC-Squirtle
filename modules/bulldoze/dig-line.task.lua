@@ -1,7 +1,9 @@
 local DigLineTask = { }
 
 DigLineTask.Options = {
-    orientation = nil
+    direction = nil,
+    length = nil,
+    returnToOrigin = nil
 }
 
 --- <summary>
@@ -18,12 +20,21 @@ end
 function DigLineTask:ctor(kernel, opts)
     self._kernel = Squirtle.Kernel.as(kernel)
     self._turtle = Squirtle.Turtle.as(self._kernel:getUnit())
-    
+
     self._opts = self.asOptions(opts)
 end
 
 function DigLineTask:run()
-    -- todo: dig sumthin!
+    local turtle = Squirtle.Turtle.as(self._kernel:getUnit())
+
+    turtle:turnToOrientation(self._opts.direction)
+    turtle:moveAggressive(Core.Side.Front, self._opts.length)
+
+    if (self._opts.returnToOrigin) then
+        turtle:turn(Core.Side.Left, 2)
+        turtle:moveAggressive(Core.Side.Front, self._opts.length)
+        turtle:turn(Core.Side.Left, 2)
+    end
 end
 
 --- <summary></summary>

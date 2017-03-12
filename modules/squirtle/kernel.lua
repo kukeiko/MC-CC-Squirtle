@@ -37,6 +37,8 @@ function Kernel:run()
         self._logY = 1
         self._logOutput.clear()
         _G["log"] = function(str) self:log(str) end
+    else
+        _G["log"] = function() end
     end
 
     Core.MessagePump.on("key", function(ev)
@@ -96,9 +98,9 @@ function Kernel:runApp(app, charSpace)
     end )
 end
 
-function Kernel:runTask(taskType, ...)
+function Kernel:queueTask(taskType, name, ...)
     local task = taskType.new(self, ...)
-    self._taskQueue:queue(task)
+    self._taskQueue:queue(name, task)
 end
 
 function Kernel:startService(service)

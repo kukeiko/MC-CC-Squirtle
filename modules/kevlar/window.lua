@@ -14,6 +14,7 @@ end
 
 function Window:ctor(content)
     self._content = Kevlar.Node.as(nil)
+    self._defaultContent = Kevlar.Node.as(nil)
     self._vBranch = Kevlar.VerticalBranch.new()
 
     self._header = Kevlar.Text.new( { text = "Window", align = Kevlar.TextAlign.Center })
@@ -48,6 +49,10 @@ function Window:getContent()
 end
 
 function Window:setContent(content)
+    if (self._content == nil) then
+        self._defaultContent = content
+    end
+
     self._content = content
     self._vBranch:removeChildByName("content")
 
@@ -73,6 +78,15 @@ end
 
 function Window:dispatchEvent(event)
     if (self._content == nil) then return end
+    event = Kevlar.Event.as(event)
+
+    if (event:getType() == Kevlar.Event.Type.Key and event:getValue() == keys.f1) then
+        if (self._defaultContent ~= nil) then
+            self:setContent(self._defaultContent)
+            event:consume()
+            return
+        end
+    end
 
     self._content:dispatchEvent(event)
 end

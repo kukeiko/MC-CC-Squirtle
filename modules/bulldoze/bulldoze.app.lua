@@ -18,53 +18,46 @@ end
 function BulldozeApp:run()
     local menu = Kevlar.Menu.new()
 
-    menu:addItem("Dig Line", function() self:digLine() end)
+    menu:addItem("Dig Line", function() self:digLine(menu) end)
 
     self._window:setContent(menu)
 end
 
-function BulldozeApp:digLine()
-    local menu = Kevlar.Menu.new()
-    local foo
+function BulldozeApp:digLine(previous)
+    local form = Kevlar.Form.new()
 
-    local length = Kevlar.HorizontalBranch.new( {
-        children =
-        {
-            Kevlar.Text.new( { text = "Length: " }),
-            Kevlar.NumberBox.new( { min = 1, max = 100 })
-        }
-    } )
+    local direction = Kevlar.DirectionBox.new( { format = Kevlar.DirectionBox.Format.All })
+    local length = Kevlar.NumberBox.new( { min = 1, max = 100 })
+    local comeBack = Kevlar.BoolBox.new( { format = Kevlar.BoolBox.Format.TrueFalse })
 
-    local direction = Kevlar.HorizontalBranch.new( {
-        children =
-        {
-            Kevlar.Text.new( { text = "Direction: " }),
-            Kevlar.DirectionBox.new( { format = Kevlar.DirectionBox.Format.All })
-        }
-    } )
+    form:addControl("Direction: ", "direction", direction)
+    form:addControl("Length: ", "length", length)
+    form:addControl("Return: ", "comeBack", comeBack)
 
-    local comeBack = Kevlar.HorizontalBranch.new( {
-        children =
-        {
-            Kevlar.Text.new( { text = "Return: " }),
-            Kevlar.BoolBox.new( { format = Kevlar.BoolBox.Format.TrueFalse, change = function(v) log(tostring(v)) end })
-        }
-    } )
+    form:onSubmit( function(value)
+        local length = value.length or 1
+        local taskName = length .. "x => " .. Core.Direction[value.direction]
 
-    local name = Kevlar.HorizontalBranch.new( {
-        children =
-        {
-            Kevlar.Text.new( { text = "Name: " }),
-            Kevlar.Textbox.new()
-        }
-    } )
+        if (value.comeBack) then
+            taskName = taskName .. " (returns)"
+        end
 
-    menu:addItem(direction)
-    menu:addItem(length)
-    menu:addItem(comeBack)
-    menu:addItem(name)
+        self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
+            direction = value.direction,
+            length = length,
+            returnToOrigin = value.comeBack
+        } )
 
-    self._window:setContent(menu)
+        self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
+            direction = value.direction,
+            length = length,
+            returnToOrigin = value.comeBack
+        } )
+
+        self._window:setContent(previous)
+    end )
+
+    self._window:setContent(form)
 end
 
 Bulldoze = Bulldoze or { }

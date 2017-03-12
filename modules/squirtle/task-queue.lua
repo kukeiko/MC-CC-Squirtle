@@ -35,8 +35,8 @@ function TaskQueue:run()
     until false
 end
 
-function TaskQueue:queue(task)
-    local handle = Squirtle.TaskHandle.new(task)
+function TaskQueue:queue(name, task)
+    local handle = Squirtle.TaskHandle.new(name, task)
     table.insert(self._queued, handle)
 
     Core.MessagePump.queue("TaskQueue:queued")
