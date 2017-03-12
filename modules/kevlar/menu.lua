@@ -57,7 +57,6 @@ function Menu:ctor(content, opts)
 
             if (item and item.handler) then
                 item.handler()
-
                 ev:consume()
             end
         end

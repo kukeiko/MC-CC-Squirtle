@@ -114,3 +114,13 @@ function table.select(self, nameOrFunc)
 
     return t
 end
+
+function table.reverse(self)
+    local t = { }
+
+    for i = #self, 1, -1 do
+        t[#self - i + 1] = self[i]
+    end
+
+    return t
+end

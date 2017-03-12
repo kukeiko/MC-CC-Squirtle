@@ -83,5 +83,11 @@ function SearchableList:getFilteredItems()
     return filtered
 end
 
+function SearchableList:dispatchEvent(event)
+    self._pagedList:base():dispatchEvent(event)
+    if (event:isConsumed()) then return end
+    self._searchBox:base():dispatchEvent(event)
+end
+
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.SearchableList = SearchableList

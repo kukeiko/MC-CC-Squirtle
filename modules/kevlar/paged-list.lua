@@ -21,16 +21,21 @@ function PagedList:ctor()
 
         if (key == keys.up) then
             self._selectionIndex = self._selectionIndex - 1
+            ev:consume()
         elseif (key == keys.down) then
             self._selectionIndex = self._selectionIndex + 1
+            ev:consume()
         elseif (key == keys.left) then
             self._pageIndex = self._pageIndex - 1
+            ev:consume()
         elseif (key == keys.right) then
             self._pageIndex = self._pageIndex + 1
+            ev:consume()
         elseif (key == keys.enter) then
             local item = self._items[self._selectionIndex]
             if (item and item.handler) then
                 item.handler()
+                ev:consume()
             end
         end
     end )

@@ -15,17 +15,31 @@ function TestApp:ctor(kernel, win)
 end
 
 function TestApp:run()
-    local menu = Kevlar.Menu.new( { wrapsAround = true })
+    local menu = Kevlar.Menu.new( { wrapsAround = true, sizing = Kevlar.Sizing.Stretched })
     local subMenu = Kevlar.Menu.as(nil)
 
-    for i = 1, 3 do
+    for i = 1, 2 do
         subMenu = Kevlar.Menu.new()
         menu:addItem(subMenu)
 
-        for e = 1, i do
-            subMenu:addItem("item " .. i .. "." .. e, function() log("invoked item " .. i .. "." .. e) end)
+        for e = 1, i + 1 do
+            subMenu:addItem("item " .. i .. "." .. e, function()
+                log(subMenu:getSizing())
+            end )
+        end
+
+        if (i == 1) then
+            subMenu:setSizing(Kevlar.Sizing.Stretched)
         end
     end
+
+    --    local vb = Kevlar.VerticalBranch.new( {
+    --        focusEnabled = true,
+    --        children =
+    --        {
+    --            Kevlar.Textbox.new(),Kevlar.Textbox.new()
+    --        }
+    --    } )
 
     self._window:setContent(menu)
 end
