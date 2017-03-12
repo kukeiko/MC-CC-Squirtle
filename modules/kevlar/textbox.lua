@@ -26,7 +26,6 @@ function Textbox:ctor(opts)
 
     self:base():onEvent(Kevlar.Event.Type.Char, function(ev)
         self._text = self._text .. ev:getValue()
-
         ev:consume()
     end )
 
@@ -35,9 +34,8 @@ function Textbox:ctor(opts)
 
         if (key == keys.backspace) then
             self._text = string.sub(self._text, 1, math.max(0, #self._text - 1))
+            ev:consume()
         end
-
-        ev:consume()
     end )
 end
 
