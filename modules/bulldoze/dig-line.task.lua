@@ -1,4 +1,6 @@
-local DigLineTask = { }
+local DigLineTask = {
+    name = "Bulldoze.DigLine"
+}
 
 DigLineTask.Options = {
     direction = nil,
@@ -53,5 +55,5 @@ Bulldoze.DigLineTask = DigLineTask
 if (turtle) then
     Squirtle = Squirtle or { }
     Squirtle.Tasks = Squirtle.Tasks or { }
-    Squirtle.Tasks.DigLineTask = DigLineTask
+    Squirtle.Tasks[DigLineTask.name] = DigLineTask
 end

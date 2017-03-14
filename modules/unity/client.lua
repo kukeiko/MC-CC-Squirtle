@@ -39,7 +39,7 @@ function Client.nearest(name, adapter, port)
 end
 
 --- <summary></summary>
---- <returns type="Unity.Adapter"></returns>
+--- <returns type="Unity.Client"></returns>
 function Client.new(adapter, serverAddress, port)
     local instance = { }
     setmetatable(instance, { __index = Client })

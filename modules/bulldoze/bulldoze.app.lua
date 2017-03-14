@@ -42,18 +42,23 @@ function BulldozeApp:digLine(previous)
             taskName = taskName .. " (returns)"
         end
 
-        self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
-            direction = value.direction,
-            length = length,
-            returnToOrigin = value.comeBack
-        } )
+        if (turtle) then
+            self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
+                direction = value.direction,
+                length = length,
+                returnToOrigin = value.comeBack
+            } )
+        elseif (pocket) then
+            local tablet = Squirtle.Tablet.as(self._kernel:getUnit())
+            local packet = Unity.Client.nearest("RemoteTurtle:ping", tablet:getWirelessAdapter(), 64)
+            local client = Unity.Client.new(tablet:getWirelessAdapter(), packet:getSourceAddress(), 64)
 
-        self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
-            direction = value.direction,
-            length = length,
-            returnToOrigin = value.comeBack
-        } )
-
+            client:send("RemoteTurtle:queueTask", "Bulldoze.DigLine", "Remote-Task-Test", {
+                direction = value.direction,
+                length = length,
+                returnToOrigin = value.comeBack
+            } )
+        end
         self._window:setContent(previous)
     end )
 
@@ -63,7 +68,7 @@ end
 Bulldoze = Bulldoze or { }
 Bulldoze.BulldozeApp = BulldozeApp
 
-if (turtle) then
+if (turtle or pocket) then
     Squirtle = Squirtle or { }
     Squirtle.Apps = Squirtle.Apps or { }
     Squirtle.Apps.Bulldoze = BulldozeApp

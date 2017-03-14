@@ -37,6 +37,7 @@
     <Folder Include="modules\bulldoze\" />
     <Folder Include="modules\scout\" />
     <Folder Include="modules\squirtle\" />
+    <Folder Include="modules\squirtle\remote-turtle\" />
     <Folder Include="modules\squirtle\test\" />
     <Folder Include="modules\unity\" />
   </ItemGroup>
@@ -88,6 +89,9 @@
     <Compile Include="modules\core\item.lua" />
     <Compile Include="modules\squirtle\kernel.lua" />
     <Compile Include="modules\squirtle\peripherals.lua" />
+    <Compile Include="modules\squirtle\remote-turtle.app.lua" />
+    <Compile Include="modules\squirtle\remote-turtle\remote-turtle.server.lua" />
+    <Compile Include="modules\squirtle\remote-turtle\remote-turtle.service.lua" />
     <Compile Include="modules\squirtle\shell.lua" />
     <Compile Include="modules\squirtle\task-handle.lua" />
     <Compile Include="modules\squirtle\task-queue.lua" />

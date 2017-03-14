@@ -79,7 +79,7 @@ function Thread:run(onCompleted, onProgress, onFailed)
     end
 
     os.queueEvent(self:getId())
-    MessagePump.create(helper, self:getId())
+    Core.MessagePump.create(helper, self:getId())
 end
 
 function Thread:runSync()

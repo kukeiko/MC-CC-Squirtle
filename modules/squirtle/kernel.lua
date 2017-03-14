@@ -16,6 +16,7 @@ function Kernel:ctor()
     self._shell = Squirtle.Shell.new(self)
     self._unit = Squirtle.Unit.as(nil)
     self._taskQueue = Squirtle.TaskQueue.new()
+    self._runningServices = { }
 
     if (turtle) then
         self._unit = Squirtle.Turtle.new()
@@ -87,13 +88,13 @@ function Kernel:getAvailableApps()
     return Squirtle.Apps
 end
 
-function Kernel:runApp(app, charSpace)
+function Kernel:runApp(appType, charSpace)
     charSpace = charSpace or Kevlar.Terminal.new(term.current())
 
     local win = self._shell:openWindow(charSpace)
 
     Core.MessagePump.run( function()
-        app = app.new(self, win)
+        local app = appType.new(self, win)
         app:run()
     end )
 end
@@ -103,10 +104,38 @@ function Kernel:queueTask(taskType, name, ...)
     self._taskQueue:queue(name, task)
 end
 
-function Kernel:startService(service)
+function Kernel:startService(serviceType)
+    local alreadyRunning = false
+
+    for k, v in pairs(self._runningServices) do
+        if (getmetatable(v) == serviceType) then
+            alreadyRunning = true
+            break
+        end
+    end
+
+    if (not alreadyRunning) then
+        local service = serviceType.new(self)
+        service:start()
+
+        table.insert(self._runningServices, service)
+    end
 end
 
-function Kernel:stopService(service)
+function Kernel:stopService(serviceType)
+    local index
+
+    for k, v in pairs(self._runningServices) do
+        if (getmetatable(v).__index == serviceType) then
+            v:stop()
+            index = k
+            break
+        end
+    end
+
+    if (index ~= nil) then
+        table.remove(self._runningServices, index)
+    end
 end
 
 function Kernel:getUnit()
@@ -114,4 +143,4 @@ function Kernel:getUnit()
 end
 
 if (Squirtle == nil) then Squirtle = { } end
-Squirtle.Kernel = Kernel 
+Squirtle.Kernel = Kernel

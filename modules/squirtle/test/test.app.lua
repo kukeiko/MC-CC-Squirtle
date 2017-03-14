@@ -15,33 +15,22 @@ function TestApp:ctor(kernel, win)
 end
 
 function TestApp:run()
-    local menu = Kevlar.Menu.new( { wrapsAround = true, sizing = Kevlar.Sizing.Stretched })
-    local subMenu = Kevlar.Menu.as(nil)
-
-    for i = 1, 2 do
-        subMenu = Kevlar.Menu.new()
-        menu:addItem(subMenu)
-
-        for e = 1, i + 1 do
-            subMenu:addItem("item " .. i .. "." .. e, function()
-                log(subMenu:getSizing())
-            end )
-        end
-
-        if (i == 1) then
-            subMenu:setSizing(Kevlar.Sizing.Stretched)
-        end
+    if (turtle) then
+        self._kernel:startService(Squirtle.RemoteTurtle.RemoteTurtleService)
+        self._kernel:stopService(Squirtle.RemoteTurtle.RemoteTurtleService)
     end
 
-    --    local vb = Kevlar.VerticalBranch.new( {
-    --        focusEnabled = true,
-    --        children =
-    --        {
-    --            Kevlar.Textbox.new(),Kevlar.Textbox.new()
-    --        }
-    --    } )
+    if (pocket) then
+        local tablet = Squirtle.Tablet.as(self._kernel:getUnit())
+        local packet = Unity.Client.nearest("RemoteTurtle:ping", tablet:getWirelessAdapter(), 64)
+        local client = Unity.Client.new(tablet:getWirelessAdapter(), packet:getSourceAddress(), 64)
 
-    self._window:setContent(menu)
+        client:send("RemoteTurtle:queueTask", "Bulldoze.DigLine", "Remote-Task-Test", {
+            direction = Core.Direction.West,
+            length = 7,
+            returnToOrigin = true
+        } )
+    end
 end
 
 if (Squirtle == nil) then Squirtle = { } end

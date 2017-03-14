@@ -121,7 +121,7 @@ function Adapter:tryReceive(name, token, source, dest, channel, timeout)
                     and(packet:getSourceAddress() == source or source == nil)
                     and(packet:getDestinationAddress() == dest or dest == nil)) then
 
-                    Log.debug("[Unity.Adapter] Accepted Packet:", packet:getName(), packet:getSourceAddress(), "=>", packet:getDestinationAddress())
+--                    Log.debug("[Unity.Adapter] Accepted Packet:", packet:getName(), packet:getSourceAddress(), "=>", packet:getDestinationAddress())
 
                     packet:addHop(self:getAddress())
                     packet:addDistance(distance)
@@ -153,14 +153,14 @@ function Adapter:onReceive(name, token, source, dest, channel, callback)
 
                 if (self._onReceiveListeners[packet:getName()] ~= nil) then
                     local copy = table.copy(self._onReceiveListeners[packet:getName()])
-
+                    log(packet)
                     for k, v in pairs(copy) do
                         if ((packet:getSourceAddress() == v.sourceAddress or v.sourceAddress == nil)
                             and(packet:getDestinationAddress() == v.destinationAddress or v.destinationAddress == nil)
                             and(packet:getToken() == v.token or v.token == nil)
                             and(receivedChannel == v.channel)) then
 
-                            Log.debug("[Unity.Adapter] Accepted Packet:", packet:getName(), packet:getSourceAddress(), "=>", packet:getDestinationAddress())
+--                            Log.debug("[Unity.Adapter] Accepted Packet:", packet:getName(), packet:getSourceAddress(), "=>", packet:getDestinationAddress())
 
                             packet:addHop(self:getAddress())
                             packet:addDistance(distance)
@@ -172,7 +172,7 @@ function Adapter:onReceive(name, token, source, dest, channel, callback)
             end
         end
 
-        self._onReceiveListenerId = MessagePump.on("modem_message", helper)
+        self._onReceiveListenerId = Core.MessagePump.on("modem_message", helper)
     end
 
     local onReceiveId = "OnReceive:" .. self._nextOnReceiveListenerId
@@ -208,7 +208,7 @@ function Adapter:off(onReceiveId)
     end
 
     if (table.size(self._onReceiveListeners) == 0) then
-        MessagePump.off(self._onReceiveListenerId)
+        Core.MessagePump.off(self._onReceiveListenerId)
     end
 end
 
