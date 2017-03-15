@@ -76,13 +76,17 @@ function Shell:openWindow(charSpace)
     table.insert(self._charSpaces, charSpace)
     self._winIndex = #self._windows
 
-    Core.MessagePump.queue("Squirtle.Shell:Redraw")
+    self:queueRedraw()
 
     return win
 end
 
 function Shell:closeWindow(win)
     --- todo: implement
+end
+
+function Shell:queueRedraw()
+    Core.MessagePump.queue("Squirtle.Shell:Redraw")
 end
 
 if (Squirtle == nil) then Squirtle = { } end

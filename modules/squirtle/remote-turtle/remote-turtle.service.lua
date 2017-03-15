@@ -26,7 +26,7 @@ function RemoteTurtleService:start()
 end
 
 function RemoteTurtleService:stop()
-
+    self._server:stop()
 end
 
 if (turtle) then

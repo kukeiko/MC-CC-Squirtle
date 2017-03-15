@@ -96,11 +96,14 @@ function Kernel:runApp(appType, charSpace)
     Core.MessagePump.run( function()
         local app = appType.new(self, win)
         app:run()
+        self._shell:queueRedraw()
     end )
 end
 
 function Kernel:queueTask(taskType, name, ...)
     local task = taskType.new(self, ...)
+
+    Core.Log.debug("queueing task '" .. name .. "' with args:", ...)
     self._taskQueue:queue(name, task)
 end
 

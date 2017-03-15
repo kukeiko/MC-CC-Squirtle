@@ -17,7 +17,6 @@ end
 function TestApp:run()
     if (turtle) then
         self._kernel:startService(Squirtle.RemoteTurtle.RemoteTurtleService)
-        self._kernel:stopService(Squirtle.RemoteTurtle.RemoteTurtleService)
     end
 
     if (pocket) then

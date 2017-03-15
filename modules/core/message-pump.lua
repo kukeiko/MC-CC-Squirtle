@@ -201,6 +201,10 @@ function MessagePump.on(event, handler, name)
             local coro = coroutine.create(handler)
             local success, param = coroutine.resume(coro, unpack(args))
 
+            if (not success) then
+                Core.Log.error(unpack(param))
+            end
+
             if (coroutine.status(coro) == "suspended") then
                 MessagePump.add(param, coro)
             end

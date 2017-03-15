@@ -105,6 +105,10 @@ function Node:isVisible()
     return self._isVisible
 end
 
+function Node:getEventManager()
+    return self._em
+end
+
 function Node:dispatchEvent(event)
     event = Kevlar.Event.as(event)
 

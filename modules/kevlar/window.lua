@@ -1,5 +1,9 @@
 local Window = { }
 
+local EventNames = {
+    onBeforeUpdate = "Window:onBeforeUpdate"
+}
+
 --- <summary></summary>
 --- <returns type="Kevlar.Window"></returns>
 function Window.new(content, opts)
@@ -37,6 +41,8 @@ function Window.as(instance) return instance end
 function Window:base() return self end
 
 function Window:update()
+    self:base():getEventManager():raise(EventNames.onBeforeUpdate)
+
     local buffer = self:base():getBuffer()
 
     self._vBranch:setSize(buffer:getSize())
@@ -74,6 +80,10 @@ end
 function Window:hideHeader()
     self._header:hide()
     self._line:hide()
+end
+
+function Window:onBeforeUpdate(handler)
+    self:base():getEventManager():on(EventNames.onBeforeUpdate, handler)
 end
 
 function Window:dispatchEvent(event)

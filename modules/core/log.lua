@@ -8,14 +8,18 @@ function Log.debug(...)
 
     for i = 1, #args do
         if (#msg > 0) then msg = msg .. " " end
-        msg = msg .. tostring(args[i])
+        if (type(args[i]) == "table") then
+            msg = msg .. textutils.serialize(args[i])
+        else
+            msg = msg .. tostring(args[i])
+        end
     end
 
     table.insert(Log._lines, msg)
 end
 
 function Log.error(...)
-    Log.debug(...)
+    Log.debug("error:", ...)
 end
 
 function Log.debugTable(t)
@@ -24,6 +28,10 @@ end
 
 function Log.dump()
     Log.dumpToFile()
+end
+
+function Log.getEntries()
+    return Log._lines
 end
 
 --- <summary>

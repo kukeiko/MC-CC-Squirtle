@@ -55,7 +55,11 @@ function TaskQueue:_dequeue()
 
         -- todo: what do with error
 
-        local success = args[1]
+        local success = table.remove(args, 1)
+
+        if (not success) then
+            Core.Log.error(unpack(args))
+        end
 
         Core.MessagePump.queue("TaskQueue:finished", success)
     end , "Task")

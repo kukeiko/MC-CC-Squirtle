@@ -26,7 +26,7 @@ end
 function RemoteTurtleServer.as(instance) return instance end
 
 function RemoteTurtleServer:start()
-    log("remote turtle server started")
+    Core.Log.debug("remote turtle server started")
     local adapter = self._turtle:getWirelessAdapter()
     self._server = Unity.Server.new(adapter, self.port, self.namespace)
 
@@ -41,7 +41,6 @@ function RemoteTurtleServer:stop()
 end
 
 function RemoteTurtleServer:ping()
-    log("received ping!")
     return "pong"
 end
 
