@@ -71,5 +71,9 @@ function BoolBox:getValue()
     return self._selectBox:getValue()
 end
 
+function BoolBox:setValue(v)
+    self._selectBox:setValue(v)
+end
+
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.BoolBox = BoolBox

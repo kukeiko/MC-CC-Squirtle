@@ -48,6 +48,8 @@ function TurtleApi:turn(side)
 end
 
 function TurtleApi:move(side)
+    side = side or Core.Side.Front
+
     local fnName
 
     if (side == Core.Side.Front) then

@@ -28,36 +28,39 @@ function BulldozeApp:digLine(previous)
 
     local direction = Kevlar.DirectionBox.new( { format = Kevlar.DirectionBox.Format.All })
     local length = Kevlar.NumberBox.new( { min = 1, max = 100 })
-    local comeBack = Kevlar.BoolBox.new( { format = Kevlar.BoolBox.Format.TrueFalse })
+    local returnToOrigin = Kevlar.BoolBox.new( { value = true })
+    local digLeft = Kevlar.BoolBox.new( { value = false })
+    local digRight = Kevlar.BoolBox.new( { value = false })
+    local digTopOrFront = Kevlar.BoolBox.new( { value = false })
+    local digBottomOrBack = Kevlar.BoolBox.new( { value = false })
 
     form:addControl("Direction: ", "direction", direction)
     form:addControl("Length: ", "length", length)
-    form:addControl("Return: ", "comeBack", comeBack)
+    form:addControl("Dig left: ", "digLeft", digLeft)
+    form:addControl("Dig right: ", "digRight", digRight)
+    form:addControl("Dig top/front: ", "digTopOrFront", digTopOrFront)
+    form:addControl("Dig bottom/back: ", "digBottomOrBack", digBottomOrBack)
+    form:addControl("Return: ", "returnToOrigin", returnToOrigin)
+
+    local taskOpts = Bulldoze.DigLineTask.asOptions( { })
 
     form:onSubmit( function(value)
-        local length = value.length or 1
-        local taskName = length .. "x => " .. Core.Direction[value.direction]
+        taskOpts = value
+        local length = taskOpts.length or 1
+        local taskName = length .. "x => " .. Core.Direction[taskOpts.direction]
 
-        if (value.comeBack) then
+        if (taskOpts.returnToOrigin) then
             taskName = taskName .. " (returns)"
         end
 
         if (turtle) then
-            self._kernel:queueTask(Bulldoze.DigLineTask, taskName, {
-                direction = value.direction,
-                length = length,
-                returnToOrigin = value.comeBack
-            } )
+            self._kernel:queueTask(Bulldoze.DigLineTask, taskName, taskOpts)
         elseif (pocket) then
             local tablet = Squirtle.Tablet.as(self._kernel:getUnit())
             local packet = Unity.Client.nearest("RemoteTurtle:ping", tablet:getWirelessAdapter(), 64)
             local client = Unity.Client.new(tablet:getWirelessAdapter(), packet:getSourceAddress(), 64)
 
-            client:send("RemoteTurtle:queueTask", "Bulldoze.DigLine", "Remote-Task-Test", {
-                direction = value.direction,
-                length = length,
-                returnToOrigin = value.comeBack
-            } )
+            client:send("RemoteTurtle:queueTask", "Bulldoze.DigLine", "Remote-Task-Test", taskOpts)
         end
         self._window:setContent(previous)
     end )

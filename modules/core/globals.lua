@@ -1,3 +1,5 @@
+-- if the number of elements, order or assigned values of the side & direction enums are changed, a lot of functions will catch on fire.
+
 local Side = {
     Front = 0,
     Right = 1,
@@ -32,7 +34,10 @@ local Direction = {
     [2] = "North",
     [3] = "East",
     [4] = "Up",
-    [5] = "Down"
+    [5] = "Down",
+    isUpOrDown = function(v)
+        return v == 4 or v == 5
+    end
 }
 
 Direction.Deltas = {

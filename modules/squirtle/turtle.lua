@@ -192,6 +192,14 @@ function Turtle:dig(side)
     return success
 end
 
+function Turtle:digTop()
+    return self:dig(Core.Side.Top)
+end
+
+function Turtle:digBottom()
+    return self:dig(Core.Side.Bottom)
+end
+
 function Turtle:digStrict(side)
     direction = direction or Core.Side.Front
 
@@ -212,6 +220,14 @@ function Turtle:turn(side, times)
     end
 end
 
+function Turtle:turnLeft(times)
+    self:turn(Core.Side.Left, times)
+end
+
+function Turtle:turnRight(times)
+    self:turn(Core.Side.Right, times)
+end
+
 function Turtle:turnToOrientation(orientation)
     if (orientation == Core.Direction.Up or orientation == Core.Direction.Down) then return false end
 
@@ -224,6 +240,10 @@ function Turtle:turnToOrientation(orientation)
     else
         self:turn(Core.Side.Right, rightTurns)
     end
+end
+
+function Turtle:turnToSide(side)
+    self:turnToOrientation(self:sideToOrientation(side))
 end
 
 function Turtle:movePeaceful(side, times)
@@ -249,7 +269,7 @@ function Turtle:tryMovePeaceful(side, times)
     return true, times
 end
 
-function Turtle:moveAggressive(side, times)
+function Turtle:moveAggressive(side, times, onStepHandler)
     times = times or 1
 
     self:getFueling():refuel(times)
@@ -268,6 +288,7 @@ function Turtle:moveAggressive(side, times)
             end
         end
 
+        if(onStepHandler) then onStepHandler() end
         success = false
     end
 end
