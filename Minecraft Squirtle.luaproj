@@ -90,7 +90,6 @@
     <Compile Include="modules\squirtle\kernel.lua" />
     <Compile Include="modules\squirtle\debug-log.app.lua" />
     <Compile Include="modules\squirtle\peripherals.lua" />
-    <Compile Include="modules\squirtle\remote-turtle.app.lua" />
     <Compile Include="modules\squirtle\remote-turtle\remote-turtle.server.lua" />
     <Compile Include="modules\squirtle\remote-turtle\remote-turtle.service.lua" />
     <Compile Include="modules\squirtle\shell.lua" />

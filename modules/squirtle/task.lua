@@ -3,7 +3,7 @@ local Task = { }
 --- <summary>
 --- </summary>
 --- <returns type="Squirtle.Task"></returns>
-function Task.new(kernel, handle)
+function Task.new()
     local instance = { }
     setmetatable(instance, { __index = Task })
     instance:ctor()
@@ -11,13 +11,9 @@ function Task.new(kernel, handle)
     return instance
 end
 
-function Task:ctor()
+function Task:ctor() end
 
-end
-
-function Task:run()
-
-end
+function Task:run() end
 
 --- <summary> instance: (Squirtle.Task) </summary>
 --- <returns type="Squirtle.Task"></returns>

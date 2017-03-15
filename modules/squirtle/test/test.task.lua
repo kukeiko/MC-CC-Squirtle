@@ -4,11 +4,13 @@ local TestTask = { }
 --- </summary>
 --- <returns type="Squirtle.TestTask"></returns>
 function TestTask.new(kernel)
-    local instance = { }
+    local instance = Squirtle.Task.new()
     setmetatable(instance, { __index = TestTask })
+    setmetatable(TestTask, { __index = Squirtle.Task })
     instance:ctor(kernel)
 
     return instance
+
 end
 
 function TestTask:ctor(kernel)
