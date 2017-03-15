@@ -16,8 +16,9 @@ DigLineTask.Options = {
 --- </summary>
 --- <returns type="Bulldoze.DigLineTask"></returns>
 function DigLineTask.new(kernel, opts)
-    local instance = { }
+    local instance = Squirtle.Task.new()
     setmetatable(instance, { __index = DigLineTask })
+    setmetatable(DigLineTask, { __index = Squirtle.Task })
     instance:ctor(kernel, opts)
 
     return instance
@@ -37,13 +38,6 @@ function DigLineTask:run()
         self:_digUpOrDown()
     else
         self:_digFront()
-        --        turtle:turnToOrientation(self._opts.direction)
-        --        turtle:moveAggressive(Core.Side.Front, self._opts.length)
-
-        --        if (self._opts.returnToOrigin) then
-        --            turtle:turn(Core.Side.Left, 2)
-        --            turtle:moveAggressive(Core.Side.Front, self._opts.length)
-        --        end
     end
 end
 
@@ -59,14 +53,6 @@ function DigLineTask:_digFront()
         [Core.Side.Bottom] = self._opts.digBottomOrBack == true,
         [Core.Side.Left] = self._opts.digLeft == true
     }
-
-    local numTrue = 0
-
-    for k, v in pairs(flags) do
-        if (v == true) then
-            numTrue = numTrue + 1
-        end
-    end
 
     local digUpAndDown = function()
         if (digUp) then turtle:digTop() end
@@ -114,6 +100,8 @@ function DigLineTask:_digFront()
         if (self._opts.digRight) then side = Core.Side.Right end
 
         if (self._opts.returnToOrigin) then
+            digAuxHandler = digUpAndDown
+
             afterFirstPhase = function()
                 turtle:turn(side)
                 turtle:moveAggressive()
