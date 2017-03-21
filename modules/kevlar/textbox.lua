@@ -11,6 +11,9 @@ Textbox.Options = {
 --- <summary></summary>
 --- <returns type="Kevlar.Textbox"></returns>
 function Textbox.new(opts)
+    if (not opts) then opts = { } end
+    opts.isFocusable = true
+
     local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = Textbox })
     setmetatable(Textbox, { __index = Kevlar.Node })

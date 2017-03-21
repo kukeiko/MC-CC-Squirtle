@@ -29,7 +29,6 @@ function Branch:ctor(opts)
     self._children = { }
     self._childMap = { }
     self._align = opts.align or Kevlar.ContentAlign.Start
-    self._focusIndex = nil
 
     if (type(opts.children) == "table") then
         for i, v in ipairs(opts.children) do
@@ -122,18 +121,10 @@ function Branch:dispatchEvent(event)
     child = Kevlar.Node.as(nil)
     event = Kevlar.Event.as(event)
 
-    local children = self:getVisibleChildren()
+    local focused = self:getFocusedChild()
 
-    if (self._focusIndex and self._focusIndex > 0 and self._focusIndex <= #children) then
-        self._children[self._focusIndex]:dispatchEvent(event)
-    else
-        for k, child in ipairs(children) do
-            child:dispatchEvent(event)
-
-            if (event:isConsumed()) then
-                break
-            end
-        end
+    if (focused) then
+        focused:dispatchEvent(event)
     end
 
     if (not event:isConsumed()) then
@@ -141,8 +132,108 @@ function Branch:dispatchEvent(event)
     end
 end
 
-function Branch:focusIndex(index)
-    self._focusIndex = index
+--- <summary></summary>
+--- <returns type="Kevlar.Node"></returns>
+function Branch:getFocusedChild()
+    local children = self:getVisibleChildren()
+
+    for k, child in ipairs(children) do
+        if (child:isFocused()) then
+            return child
+        end
+    end
+end
+
+function Branch:focus()
+    local focused = self:getFocusedChild()
+    if (focused) then return true end
+
+    local children = self:getVisibleChildren()
+
+    for k, child in ipairs(children) do
+        if (child:focus()) then
+            return true
+        end
+    end
+
+    return false
+end
+
+function Branch:focusNext(wrapAround)
+    return self:focusSibling(false, wrapAround)
+end
+
+function Branch:focusPrevious(wrapAround)
+    return self:focusSibling(true, wrapAround)
+end
+
+-- returns false if focused child didn't change
+function Branch:focusSibling(isBack, wrapAround)
+    isBack = isBack or false
+    wrapAround = wrapAround or false
+
+    local children = self:getVisibleChildren()
+
+    if (isBack) then
+        children = table.reverse(children)
+    end
+
+    local prev = Kevlar.Node.as(nil)
+    local nx = Kevlar.Node.as(nil)
+    local firstFocusable = Kevlar.Node.as(nil)
+
+
+    for k, child in ipairs(children) do
+        -- remember the first focusable in case we need to wrap around
+        if (not firstFocusable and child:isFocusable()) then
+            firstFocusable = child
+        end
+
+        if (prev) then
+            if (child:isFocusable()) then
+                nx = child
+                break
+            end
+        elseif (child:isFocused()) then
+            prev = child
+        end
+    end
+
+    if (prev) then
+        if (nx) then
+            prev:blur()
+            return nx:focus()
+        elseif (wrapAround and firstFocusable ~= prev) then
+            prev:blur()
+            return firstFocusable:focus()
+        end
+    else
+        return false
+    end
+end
+
+function Branch:isFocused()
+    return self:getFocusedChild() ~= nil
+end
+
+function Branch:isFocusable()
+    local children = self:getVisibleChildren()
+
+    for k, child in ipairs(children) do
+        if (child:isFocusable()) then
+            return true
+        end
+    end
+
+    return false
+end
+
+function Branch:blur()
+    local focused = self:getFocusedChild()
+
+    if (focused) then
+        focused:blur()
+    end
 end
 
 if (Kevlar == nil) then Kevlar = { } end

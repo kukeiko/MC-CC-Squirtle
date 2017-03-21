@@ -46,8 +46,8 @@ function BulldozeApp:digLine(previous)
 
     form:onSubmit( function(value)
         taskOpts = value
-        local length = taskOpts.length or 1
-        local taskName = length .. "x => " .. Core.Direction[taskOpts.direction]
+        taskOpts.length = taskOpts.length or 1
+        local taskName = taskOpts.length .. "x => " .. Core.Direction[taskOpts.direction]
 
         if (taskOpts.returnToOrigin) then
             taskName = taskName .. " (returns)"
@@ -62,6 +62,7 @@ function BulldozeApp:digLine(previous)
 
             client:send("RemoteTurtle:queueTask", "Bulldoze.DigLine", "Remote-Task-Test", taskOpts)
         end
+
         self._window:setContent(previous)
     end )
 

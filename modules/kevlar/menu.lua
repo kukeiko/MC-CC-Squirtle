@@ -11,21 +11,20 @@ Menu.Options = {
 --- <summary></summary>
 --- <returns type="Kevlar.Menu"></returns>
 function Menu.new(opts)
-    local content = Kevlar.VerticalBranch.new(opts)
-    local instance = Kevlar.ProxyNode.new(content)
+    local proxied = Kevlar.VerticalBranch.new(opts)
+    local instance = Kevlar.ProxyNode.new(proxied)
     setmetatable(instance, { __index = Menu })
     setmetatable(Menu, { __index = Kevlar.ProxyNode })
 
-    instance:ctor(content, opts)
+    instance:ctor(proxied, opts)
 
     return instance
 end
 
-function Menu:ctor(content, opts)
+function Menu:ctor(proxied, opts)
     opts = self.asOptions(opts or { })
 
-    self._items = { }
-    self._vBranch = Kevlar.VerticalBranch.as(content)
+    self._vBranch = Kevlar.VerticalBranch.as(proxied)
     self._selectedIndex = 1
     self._wrapsAround = opts.wrapsAround or false
 
@@ -33,38 +32,26 @@ function Menu:ctor(content, opts)
         local key = ev:getValue()
 
         if (key == keys.up) then
-            if (self._selectedIndex > 1 or(self._wrapsAround and self._selectedIndex == 1)) then
-                self._selectedIndex = self._selectedIndex - 1
-
-                if (self._selectedIndex < 1) then
-                    self._selectedIndex = #self._items
-                end
-
+            if (self._vBranch:base():focusPrevious(self._wrapsAround)) then
                 ev:consume()
             end
         elseif (key == keys.down) then
-            if (self._selectedIndex < #self._items or(self._wrapsAround and self._selectedIndex == #self._items)) then
-                self._selectedIndex = self._selectedIndex + 1
-
-                if (self._selectedIndex > #self._items) then
-                    self._selectedIndex = 1
-                end
-
+            if (self._vBranch:base():focusNext(self._wrapsAround)) then
                 ev:consume()
             end
         elseif (key == keys.enter) then
-            local item = self._items[self._selectedIndex]
+            local focused = self._vBranch:base():getFocusedChild()
 
-            if (item and item.handler) then
-                item.handler()
-                ev:consume()
+            if (focused) then
+                local handler = focused:getData("handler")
+
+                if (handler) then
+                    handler()
+                    ev:consume()
+                end
             end
         end
-
-        self._vBranch:focusIndex(self._selectedIndex)
     end )
-
-    self._vBranch:focusIndex(self._selectedIndex)
 end
 
 --- <summary></summary>
@@ -86,10 +73,10 @@ function Menu.super() return Kevlar.ProxyNode end
 function Menu:update()
     local indicator = Kevlar.Text.as(nil)
 
-    for i, item in ipairs(self:getItems()) do
-        indicator = item.node:getChildByName("indicator")
+    for i, child in ipairs(self._vBranch:base():getChildren()) do
+        indicator = child:getChildByName("indicator")
 
-        if (i == self._selectedIndex) then
+        if (child:isFocused()) then
             indicator:setText("> ")
         else
             indicator:setText("  ")
@@ -103,26 +90,40 @@ function Menu:addItem(textOrNode, handler)
     handler = handler or function() end
 
     local node = Kevlar.Node.as(textOrNode)
+    local makeIndicatorFocusable = false
 
     if (type(textOrNode) == "string") then
-        node = Kevlar.Text.new( { text = textOrNode })
+        node = Kevlar.Text.new( {
+            isFocusable = true,
+            text = textOrNode,
+        } )
+    elseif (not textOrNode:isFocusable()) then
+        makeIndicatorFocusable = true
     end
 
-    local indicator = Kevlar.Text.new( { text = "  ", align = Kevlar.TextAlign.Left, width = 2, height = 1, sizing = Kevlar.Sizing.Fixed })
     local container = Kevlar.HorizontalBranch.new( {
+        data = { handler = handler },
         children =
         {
-            { name = "indicator", node = indicator },
-            { name = "item", node = node }
+            {
+                name = "indicator",
+                node = Kevlar.Text.new( {
+                    text = "  ",
+                    align = Kevlar.TextAlign.Left,
+                    width = 2,
+                    height = 1,
+                    sizing = Kevlar.Sizing.Fixed,
+                    isFocusable = makeIndicatorFocusable
+                } )
+            },
+            {
+                name = "item",
+                node = node
+            }
         }
     } )
 
-    table.insert(self._items, { node = container, handler = handler })
     self._vBranch:addChild(container)
-end
-
-function Menu:getItems()
-    return self._items
 end
 
 if (Kevlar == nil) then Kevlar = { } end

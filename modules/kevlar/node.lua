@@ -3,8 +3,10 @@
 local Node = { }
 
 Node.Options = {
+    data = nil,
     height = nil,
     hidden = nil,
+    isFocusable = nil,
     sizing = nil,
     width = nil
 }
@@ -26,6 +28,9 @@ function Node:ctor(opts)
     self._em = Core.EventManager.new()
     self._sizing = opts.sizing or Kevlar.Sizing.Dynamic
     self._isVisible = not opts.hidden
+    self._isFocused = false
+    self._isFocusable = opts.isFocusable or false
+    self._data = opts.data or { }
 end
 
 --- <summary></summary>
@@ -105,6 +110,25 @@ function Node:isVisible()
     return self._isVisible
 end
 
+function Node:focus()
+    if (not self:isFocusable()) then return false end
+    self._isFocused = true
+
+    return true
+end
+
+function Node:isFocused()
+    return self._isFocused
+end
+
+function Node:isFocusable()
+    return self._isFocusable
+end
+
+function Node:blur()
+    self._isFocused = false
+end
+
 function Node:getEventManager()
     return self._em
 end
@@ -117,6 +141,14 @@ end
 
 function Node:onEvent(type, handler)
     self._em:on("UiEvent:" .. type, handler)
+end
+
+function Node:setData(name, data)
+    self._data[name] = data
+end
+
+function Node:getData(name)
+    return self._data[name]
 end
 
 if (Kevlar == nil) then Kevlar = { } end

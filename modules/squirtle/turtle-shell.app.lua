@@ -23,6 +23,7 @@ function TurtleShell:run()
     end
 
     self._window:setContent(list)
+    self._window:setTitle("Shell")
     self._window:hideHeader()
 end
 

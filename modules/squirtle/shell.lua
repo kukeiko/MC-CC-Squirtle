@@ -40,14 +40,17 @@ function Shell:run()
         end
 
         if (event and event:getType() == Kevlar.Event.Type.Key) then
-            if (event:getValue() == keys.tab) then
+            if (event:getValue() == keys.tab and #self._windows > 1) then
                 event:consume()
 
+                self._windows[self._winIndex]:blur()
                 self._winIndex = self._winIndex + 1
 
                 if (self._winIndex > #self._windows) then
                     self._winIndex = 1
                 end
+
+                self._windows[self._winIndex]:focus()
             end
         end
 
@@ -76,6 +79,7 @@ function Shell:openWindow(charSpace)
     table.insert(self._charSpaces, charSpace)
     self._winIndex = #self._windows
 
+    win:focus()
     self:queueRedraw()
 
     return win

@@ -12,6 +12,9 @@ SelectBox.Options = {
 --- <summary></summary>
 --- <returns type="Kevlar.SelectBox"></returns>
 function SelectBox.new(opts)
+    if (not opts) then opts = { } end
+    opts.isFocusable = true
+
     local instance = Kevlar.ProxyNode.new(Kevlar.Text.new(opts))
 
     setmetatable(instance, { __index = SelectBox })

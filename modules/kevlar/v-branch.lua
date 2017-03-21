@@ -152,9 +152,5 @@ function VerticalBranch:getAlign()
     return self.super().getAlign(self)
 end
 
-function VerticalBranch:focusIndex(index)
-    self.super().focusIndex(self, index)
-end
-
 if (Kevlar == nil) then Kevlar = { } end
 Kevlar.VerticalBranch = VerticalBranch

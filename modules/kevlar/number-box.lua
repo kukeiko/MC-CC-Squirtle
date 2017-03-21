@@ -14,6 +14,9 @@ NumberBox.Options = {
 --- <summary></summary>
 --- <returns type="Kevlar.NumberBox"></returns>
 function NumberBox.new(opts)
+    if (not opts) then opts = { } end
+    opts.isFocusable = true
+
     local instance = Kevlar.ProxyNode.new(Kevlar.Text.new(opts))
 
     setmetatable(instance, { __index = NumberBox })

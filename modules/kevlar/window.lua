@@ -57,6 +57,8 @@ end
 function Window:setContent(content)
     if (self._content == nil) then
         self._defaultContent = content
+    elseif (self._isFocused) then
+        self._content:blur()
     end
 
     self._content = content
@@ -65,6 +67,10 @@ function Window:setContent(content)
     if (content ~= nil) then
         self._content:setSizing(Kevlar.Sizing.Stretched)
         self._vBranch:addChild(content, "content")
+
+        if (self._isFocused) then
+            self._content:focus()
+        end
     end
 end
 
@@ -99,6 +105,32 @@ function Window:dispatchEvent(event)
     end
 
     self._content:dispatchEvent(event)
+end
+
+function Window:focus()
+    self._isFocused = true
+
+    if (self._content) then
+        self._content:focus()
+    end
+
+    return true
+end
+
+function Window:isFocused()
+    return self._isFocused
+end
+
+function Window:isFocusable()
+    return true
+end
+
+function Window:blur()
+    self._isFocused = false
+
+    if (self._content) then
+        self._content:blur()
+    end
 end
 
 if (Kevlar == nil) then Kevlar = { } end

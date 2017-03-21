@@ -3,6 +3,9 @@ local PagedList = { }
 --- <summary></summary>
 --- <returns type="Kevlar.PagedList"></returns>
 function PagedList.new(opts)
+    if (not opts) then opts = { } end
+    opts.isFocusable = true
+
     local instance = Kevlar.Node.new(opts)
     setmetatable(instance, { __index = PagedList })
     setmetatable(PagedList, { __index = Kevlar.Node })

@@ -91,8 +91,24 @@ end
 
 function ProxyNode:isVisible()
     return self._proxied:isVisible()
-
 end
+
+function ProxyNode:focus()
+    return self._proxied:focus()
+end
+
+function ProxyNode:isFocused()
+    return self._proxied:isFocused()
+end
+
+function ProxyNode:isFocusable()
+    return self._proxied:isFocusable()
+end
+
+function ProxyNode:blur()
+    self._proxied:blur()
+end
+
 function ProxyNode:dispatchEvent(event)
     self._proxied:dispatchEvent(event)
 end
