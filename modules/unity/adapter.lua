@@ -153,7 +153,7 @@ function Adapter:onReceive(name, token, source, dest, channel, callback)
 
                 if (self._onReceiveListeners[packet:getName()] ~= nil) then
                     local copy = table.copy(self._onReceiveListeners[packet:getName()])
-                    log(packet)
+ 
                     for k, v in pairs(copy) do
                         if ((packet:getSourceAddress() == v.sourceAddress or v.sourceAddress == nil)
                             and(packet:getDestinationAddress() == v.destinationAddress or v.destinationAddress == nil)

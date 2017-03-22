@@ -32,16 +32,6 @@ end
 function Kernel.as(instance) return instance end
 
 function Kernel:run()
-    --- todo: temporary
-    if (peripheral.getType("front") == "monitor") then
-        self._logOutput = peripheral.wrap("front")
-        self._logY = 1
-        self._logOutput.clear()
-        _G["log"] = function(str) self:log(str) end
-    else
-        _G["log"] = function() end
-    end
-
     Core.MessagePump.on("key", function(ev)
         if (ev == keys.f5) then
             os.reboot()
@@ -67,21 +57,6 @@ function Kernel:run()
         self._unit:load()
         self:runApp(Squirtle.Apps.TurtleShell)
     end )
-end
-
-function Kernel:log(str)
-    if (not self._logOutput) then return end
-    local w, h = self._logOutput.getSize()
-
-    if (self._logY > h) then
-        self._logOutput.clear()
-        self._logY = 1
-    end
-
-    self._logOutput.setCursorPos(1, self._logY)
-    self._logOutput.write(str)
-
-    self._logY = self._logY + 1
 end
 
 function Kernel:getAvailableApps()
